@@ -13,7 +13,7 @@ input   BtnL, BtnU, BtnD, BtnR, BtnC;
 /*  OUTPUTS */
 // Control signals on Memory chips 	(to disable them)
 output 	MemOE, MemWR, RamCS, QuadSpiFlashCS;
-//VGA signals
+// TODO VGA signals
 
 
 /* Local Signals */ 
