@@ -9,8 +9,6 @@ module divider_top (
 /*  INPUTS */
 input	ClkPort;	
 input   BtnL, BtnU, BtnD, BtnR, BtnC;	
-input	Sw7, Sw6, Sw5, Sw4, Sw3, Sw2, Sw1, Sw0;
-
 
 /*  OUTPUTS */
 // Control signals on Memory chips 	(to disable them)
