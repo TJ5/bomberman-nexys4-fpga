@@ -19,7 +19,7 @@ output 	MemOE, MemWR, RamCS, QuadSpiFlashCS;
 /* Local Signals */ 
 reg [26:0]	DIV_CLK;
 wire        Reset, ClkPort;
-wire		board_clk, sys_clk;
+wire		sys_clk;
 
 //Debouncer wires
 wire  		Left_SCEN;
@@ -29,7 +29,7 @@ wire  		Down_SCEN;
 wire        Middle_SCEN;
 
 //Clock divider
-always @(posedge board_clk, posedge Reset) 	
+always @(posedge sys_clk, posedge Reset) 	
     begin							
         if (Reset)
 		DIV_CLK <= 0;
@@ -37,12 +37,11 @@ always @(posedge board_clk, posedge Reset)
 		DIV_CLK <= DIV_CLK + 1'b1;
     end
 
-assign	sys_clk = board_clk; //Running at the full 100Mhz speed
+assign	sys_clk = ClkPort; //Running at the full 100Mhz speed
 
 // Disable the two memories so that they do not interfere with the rest of the design.
 assign {MemOE, MemWR, RamCS, QuadSpiFlashCS} = 4'b1111;
 
-assign board_clk = ClkPort;	 	
 
 //Button debouncers
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_left
