@@ -28,7 +28,7 @@ wire  		Right_SCEN;
 wire  		Down_SCEN;
 wire        Middle_SCEN;
 
-//TODO - clock divider here? 
+//Clock divider
 always @(posedge board_clk, posedge Reset) 	
     begin							
         if (Reset)
@@ -44,8 +44,7 @@ assign {MemOE, MemWR, RamCS, QuadSpiFlashCS} = 4'b1111;
 
 assign board_clk = ClkPort;	 	
 
-//TODO instantiate modules
-
+//Button debouncers
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_left
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnL), .DPB( ), .SCEN(Left_SCEN), .MCEN( ), .CCEN( ));
 
@@ -60,5 +59,8 @@ ee201_debouncer #(.N_dc(25)) ee201_debouncer_down
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_middle
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnC), .DPB( ), .SCEN(Middle_SCEN), .MCEN( ), .CCEN( ));
+
+//TODO instantiate modules
+
 
 endmodule
