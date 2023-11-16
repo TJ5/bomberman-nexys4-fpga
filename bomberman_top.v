@@ -9,9 +9,6 @@ module divider_top (
 
     );
 
-// TODO VGA signals
-
-
 /* Local Signals */ 
 reg [26:0]	DIV_CLK;
 wire        Reset, ClkPort;
@@ -23,6 +20,9 @@ wire  		Up_DPB;
 wire  		Right_DPB;
 wire  		Down_DPB;
 wire        Middle_DPB;
+
+//VGA pixel
+wire[9:0] hc, vc;
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
@@ -54,6 +54,10 @@ ee201_debouncer #(.N_dc(25)) ee201_debouncer_down
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_middle
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnC), .DPB(Middle_DPB), .SCEN(), .MCEN( ), .CCEN( ));
+
+//Display Controller
+display_controller dc
+    (.clk(sys_clk), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc));
 
 //TODO instantiate modules
 
