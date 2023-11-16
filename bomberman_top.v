@@ -6,7 +6,7 @@ module divider_top (
     //VGA signals
     output hSync, vSync, 
     output [3:0] vgaR, vgaG, vgaB
-    
+
     );
 
 // TODO VGA signals
@@ -18,11 +18,11 @@ wire        Reset, ClkPort;
 wire		sys_clk;
 
 //Debouncer wires
-wire  		Left_SCEN;
-wire  		Up_SCEN;
-wire  		Right_SCEN;
-wire  		Down_SCEN;
-wire        Middle_SCEN;
+wire  		Left_DPB;
+wire  		Up_DPB;
+wire  		Right_DPB;
+wire  		Down_DPB;
+wire        Middle_DPB;
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
@@ -41,19 +41,19 @@ assign {MemOE, MemWR, RamCS, QuadSpiFlashCS} = 4'b1111;
 
 //Button debouncers
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_left
-    (.CLK(sys_clk), .RESET(Reset), .PB(BtnL), .DPB( ), .SCEN(Left_SCEN), .MCEN( ), .CCEN( ));
+    (.CLK(sys_clk), .RESET(Reset), .PB(BtnL), .DPB(Left_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_right
-    (.CLK(sys_clk), .RESET(Reset), .PB(BtnR), .DPB( ), .SCEN(Right_SCEN), .MCEN( ), .CCEN( ));
+    (.CLK(sys_clk), .RESET(Reset), .PB(BtnR), .DPB(Right_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_up
-    (.CLK(sys_clk), .RESET(Reset), .PB(BtnU), .DPB( ), .SCEN(Up_SCEN), .MCEN( ), .CCEN( ));
+    (.CLK(sys_clk), .RESET(Reset), .PB(BtnU), .DPB(Up_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_down
-    (.CLK(sys_clk), .RESET(Reset), .PB(BtnD), .DPB( ), .SCEN(Down_SCEN), .MCEN( ), .CCEN( ));
+    (.CLK(sys_clk), .RESET(Reset), .PB(BtnD), .DPB(Down_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 ee201_debouncer #(.N_dc(25)) ee201_debouncer_middle
-    (.CLK(sys_clk), .RESET(Reset), .PB(BtnC), .DPB( ), .SCEN(Middle_SCEN), .MCEN( ), .CCEN( ));
+    (.CLK(sys_clk), .RESET(Reset), .PB(BtnC), .DPB(Middle_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 //TODO instantiate modules
 
