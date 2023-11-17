@@ -17,8 +17,8 @@ module bomberman
 
    /* OUTPUTS */     
    wire bomberman_on;
-   wire [9:0] b_x, b_y; 
-   wire [11:0] rgb_out;
+   reg [9:0] b_x, b_y; 
+   reg [11:0] rgb_out;
 
 
 
@@ -44,15 +44,11 @@ localparam Up = 4'b0010;
 localparam Down = 4'b0001;
 localparam Idle = 4'b0000;
 
-   output  q_Left, q_Right, q_Up, q_Down;
    reg [3:0] movement_state;	
    assign {q_Left, q_Right, q_Up, q_Down} = movement_state;
 
     wire blocked_left, blocked_right, blocked_up, blocked_down;
-    bomberman_blocked[0] = blocked_down;
-    bomberman_blocked[1] = blocked_up;
-    bomberman_blocked[2] = blocked_right;
-    bomberman_blocked[3] = blocked_left;
+    assign {blocked_left, blocked_right, blocked_up, blocked_down} = bomberman_blocked;
    
  
     always @(posedge clk, posedge reset)
@@ -148,19 +144,9 @@ assign col = v_x - b_x; // column of current pixel within bomberman sprite
 assign row = v_y - b_y; // row of current pixel within bomberman sprite
 
 // instantiate bomberman ROM, Note color_data_bomberman will output the color of the current pixel within the bomberman sprite
-bomberman_rom bm_rom_unit(.clk(clk), .row(row), .col(col), .color_data(color_data_bomberman));
+bomberman_rom bm_rom_unit(.clk(clk), .row(row), .col(col), .color_data(rgb_out));
            
 // Notify top_module that current pixel is inside of bomberman's sprite, so it should display the rgb_out from the bombermman module 
 assign bomberman_on = (v_x >= b_x) & (v_x <= b_x + B_W - 1) & (v_y >= b_y) & (v_y <= b_y + B_H - 1);
-
-always @ (*)
-    begin
-        bomberman_on = 0;
-        rgb_out = 0;
-        if(bomberman_on)
-            rgb_out = color_data_bomberman;
-    end
-
-
 
 endmodule
