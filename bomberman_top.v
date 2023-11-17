@@ -51,11 +51,18 @@ reg game_over;
 reg bomberman_blocked_left, bomberman_blocked_right, 
     bomberman_blocked_up, bomberman_blocked_down;
 
+//TEMP
+bomberman_blocked_left = 0;
+bomberman_blocked_right = 0;
+bomberman_blocked_up = 0;
+bomberman_blocked_down = 0;
+
 reg [3:0] bomberman_blocked = {
     bomberman_blocked_down, 
     bomberman_blocked_up, 
     bomberman_blocked_right, 
     bomberman_blocked_left};
+
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	

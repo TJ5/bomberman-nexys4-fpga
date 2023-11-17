@@ -1,24 +1,24 @@
 module bomberman
-    (clk,reset                                    //System Clock, Game Reset
-    L, U, R, D, C, 	              //bomberman actions -> Comes from top  module
-    v_x, v_y,                                     //current pixel location -> Comes from vga_sync module
-    bomberman_blocked,                                    //bomberman is allowed to move? -> Comes from B_compare module
-    game_over,                                    //game is over? -> Comes from top module
-    b_x, b_y,                                     //top left corner pixel location of bomberman sprite -> Goes to Bomberman_Rom_module
-    bomberman_on,                                 //current pixel location is inside bomberman sprite? -> Goes to Top_module 
-    rgb_out                                       //color of current pixel within the bomberman sprite -> Goes to Top_module
+    (input clk,reset,                                    //System Clock, Game Reset
+    input L, U, R, D, C, 	              //bomberman actions -> Comes from top  module
+    input v_x, v_y,                                     //current pixel location -> Comes from vga_sync module
+    input [3:0] bomberman_blocked,                                    //bomberman is allowed to move? -> Comes from B_compare module
+    input game_over,                                    //game is over? -> Comes from top module
+    output [9:0] b_x, b_y,                                     //top left corner pixel location of bomberman sprite -> Goes to Bomberman_Rom_module
+    output bomberman_on,                                 //current pixel location is inside bomberman sprite? -> Goes to Top_module 
+    output [11:0] rgb_out                                       //color of current pixel within the bomberman sprite -> Goes to Top_module
     );
 
     /* INPUTS */
-   input wire clk, reset,
-   input wire [9:0] v_x, v_y,   
-   input wire [3:0] bomberman_blocked,  
-   input wire game_over,    
+   wire clk, reset;
+   wire [9:0] v_x, v_y;
+   wire [3:0] bomberman_blocked;
+   wire game_over;
 
    /* OUTPUTS */     
-   output wire bomberman_on,   
-   output wire [9:0] b_x, b_y,  
-   output wire [11:0] rgb_out;   
+   wire bomberman_on;
+   wire [9:0] b_x, b_y; 
+   wire [11:0] rgb_out;
 
 
 
