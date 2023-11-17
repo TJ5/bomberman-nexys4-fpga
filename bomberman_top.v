@@ -14,6 +14,23 @@ reg [26:0]	DIV_CLK;
 wire        Reset, ClkPort;
 wire		sys_clk;
 
+//RGB Signals
+wire [11:0] bomberman_rgb,
+            breakable_wall_rgb,
+            enemy_rgb,
+            bomb_rgb,
+            explosion_rgb,
+            unbreakable_wall_rgb;
+
+//RGB Enable signals
+wire 
+    bomberman_rgb_en,
+    breakable_wall_rgb_en,
+    enemy_rgb_en,
+    bomb_rgb_en,
+    explosion_rgb_en,
+    unbreakable_wall_rgb_en;
+
 //Debouncer wires
 wire  		Left_DPB;
 wire  		Up_DPB;
@@ -23,6 +40,22 @@ wire        Middle_DPB;
 
 //VGA pixel
 wire[9:0] hc, vc;
+
+//Bomberman location
+reg [9:0] b_x, b_y;
+
+//Game over
+reg game_over;
+
+//Bomberman blocked
+reg bomberman_blocked_left, bomberman_blocked_right, 
+    bomberman_blocked_up, bomberman_blocked_down;
+
+reg [3:0] bomberman_blocked = {
+    bomberman_blocked_down, 
+    bomberman_blocked_up, 
+    bomberman_blocked_right, 
+    bomberman_blocked_left};
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
@@ -61,5 +94,10 @@ display_controller dc
 
 //TODO instantiate modules
 
+bomberman bm 
+    (.clk(sys_clk), .reset(Reset), .L(Left_DPB), .R(Right_DPB), .U(Up_DPB), 
+    .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .game_over(game_over), 
+    .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb)
+    .bomberman_on(bomberman_rgb_en));
 
 endmodule
