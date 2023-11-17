@@ -153,7 +153,7 @@ bomberman_rom bm_rom_unit(.clk(clk), .row(row), .col(col), .color_data(color_dat
 // Notify top_module that current pixel is inside of bomberman's sprite, so it should display the rgb_out from the bombermman module 
 assign bomberman_on = (v_x >= b_x) & (v_x <= b_x + B_W - 1) & (v_y >= b_y) & (v_y <= b_y + B_H - 1);
 
-always@*
+always @ (*)
     begin
         bomberman_on = 0;
         rgb_out = 0;
