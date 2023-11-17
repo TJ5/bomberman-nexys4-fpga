@@ -72,19 +72,19 @@ assign {MemOE, MemWR, RamCS, QuadSpiFlashCS} = 4'b1111;
 
 
 //Button debouncers
-ee201_debouncer #(.N_dc(25)) ee201_debouncer_left
+debouncer #(.N_dc(25)) debouncer_left
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnL), .DPB(Left_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
-ee201_debouncer #(.N_dc(25)) ee201_debouncer_right
+debouncer #(.N_dc(25)) debouncer_right
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnR), .DPB(Right_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
-ee201_debouncer #(.N_dc(25)) ee201_debouncer_up
+debouncer #(.N_dc(25)) debouncer_up
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnU), .DPB(Up_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
-ee201_debouncer #(.N_dc(25)) ee201_debouncer_down
+debouncer #(.N_dc(25)) debouncer_down
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnD), .DPB(Down_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
-ee201_debouncer #(.N_dc(25)) ee201_debouncer_middle
+debouncer #(.N_dc(25)) debouncer_middle
     (.CLK(sys_clk), .RESET(Reset), .PB(BtnC), .DPB(Middle_DPB), .SCEN(), .MCEN( ), .CCEN( ));
 
 //Display Controller
