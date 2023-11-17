@@ -100,4 +100,12 @@ bomberman bm
     .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb)
     .bomberman_on(bomberman_rgb_en));
 
+case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
+    6'b000001: {vgaR, vgaB, vgaG} = unbreakable_wall_rgb;
+    6'b000010: {vgaR, vgaB, vgaG} = explosion_rgb;
+    6'b000100: {vgaR, vgaB, vgaG} = bomb_rgb;
+    6'b001000: {vgaR, vgaB, vgaG} = enemy_rgb;
+    6'b010000: {vgaR, vgaB, vgaG} = breakable_wall_rgb;
+    6'b100000: {vgaR, vgaB, vgaG} = bomberman_rgb;
+endcase
 endmodule
