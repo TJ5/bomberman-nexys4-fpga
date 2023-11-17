@@ -60,8 +60,8 @@ localparam Idle = 4'b0000;
             if (reset)
                 begin
                 //Initialize bomberman to corner of the map
-                b_x     <= 0;                 
-                b_y     <= 0;
+                b_x     <= 10'd144;                 
+                b_y     <= 10'd400;
                 //Initialize movement state to idle
                 movement_state <= Idle;
                 end
