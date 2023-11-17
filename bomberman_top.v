@@ -1,4 +1,4 @@
-module divider_top (   
+module bomberman_top (   
 	output MemOE, MemWR, RamCS, QuadSpiFlashCS,
     input ClkPort,                           // the 100 MHz incoming clock signal
 	input BtnL, BtnU, BtnD, BtnR,            // the Left, Up, Down, and the Right buttons 		BtnL, BtnR,
@@ -41,6 +41,10 @@ wire        Middle_DPB;
 //VGA pixel
 wire[9:0] hc, vc;
 
+reg [3:0]
+    vgaR,
+    vgaG,
+    vgaB;
 //Bomberman location
 reg [9:0] b_x, b_y;
 
@@ -48,20 +52,8 @@ reg [9:0] b_x, b_y;
 reg game_over;
 
 //Bomberman blocked
-reg bomberman_blocked_left, bomberman_blocked_right, 
-    bomberman_blocked_up, bomberman_blocked_down;
 
-//TEMP
-bomberman_blocked_left = 0;
-bomberman_blocked_right = 0;
-bomberman_blocked_up = 0;
-bomberman_blocked_down = 0;
-
-reg [3:0] bomberman_blocked = {
-    bomberman_blocked_down, 
-    bomberman_blocked_up, 
-    bomberman_blocked_right, 
-    bomberman_blocked_left};
+reg [3:0] bomberman_blocked = 4'b0000;
 
 
 //Clock divider
@@ -104,16 +96,19 @@ display_controller dc
 bomberman bm 
     (.clk(sys_clk), .reset(Reset), .L(Left_DPB), .R(Right_DPB), .U(Up_DPB), 
     .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .game_over(game_over), 
-    .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb)
+    .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb),
     .bomberman_on(bomberman_rgb_en));
-
+assign 
+always @ *
+    begin
 case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
-    6'b000001: {vgaR, vgaB, vgaG} = unbreakable_wall_rgb;
-    6'b000010: {vgaR, vgaB, vgaG} = explosion_rgb;
-    6'b000100: {vgaR, vgaB, vgaG} = bomb_rgb;
-    6'b001000: {vgaR, vgaB, vgaG} = enemy_rgb;
-    6'b010000: {vgaR, vgaB, vgaG} = breakable_wall_rgb;
-    6'b100000: {vgaR, vgaB, vgaG} = bomberman_rgb;
-    default: {vgaR, vgaB, vgaG} = 12'b000000000000;
+    6'b000001: {vgaR, vgaB, vgaG} <= unbreakable_wall_rgb;
+    6'b000010: {vgaR, vgaB, vgaG} <= explosion_rgb;
+    6'b000100: {vgaR, vgaB, vgaG} <= bomb_rgb;
+    6'b001000: {vgaR, vgaB, vgaG} <= enemy_rgb;
+    6'b010000: {vgaR, vgaB, vgaG} <= breakable_wall_rgb;
+    6'b100000: {vgaR, vgaB, vgaG} <= bomberman_rgb;
+    default: {vgaR, vgaB, vgaG} <= 12'b000000000000;
 endcase
+end
 endmodule
