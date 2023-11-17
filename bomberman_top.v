@@ -46,7 +46,7 @@ reg [3:0]
     vgaG,
     vgaB;
 //Bomberman location
-reg [9:0] b_x, b_y;
+wire [9:0] b_x, b_y;
 
 //Game over
 reg game_over;

@@ -10,17 +10,15 @@ module bomberman
     );
 
     /* INPUTS */
-   wire clk, reset;
-   wire [9:0] v_x, v_y;
-   wire [3:0] bomberman_blocked;
-   wire game_over;
+    wire clk, reset;
+    wire [9:0] v_x, v_y;
+    wire [3:0] bomberman_blocked;
+    wire game_over;
 
-   /* OUTPUTS */     
-   wire bomberman_on;
-   reg [9:0] b_x, b_y; 
-   reg [11:0] rgb_out;
-
-
+    /* OUTPUTS */     
+    wire bomberman_on;
+    reg [9:0] b_x, b_y; 
+    wire [11:0] rgb_out;
 
 
     //pixel coordinate boundaries for VGA display area
