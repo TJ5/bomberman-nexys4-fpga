@@ -21,11 +21,11 @@ module bomberman
     wire [11:0] rgb_out;
 
 
-    //pixel coordinate boundaries for VGA display area
-    localparam MAX_X = 740;
-    localparam MIN_X = 144;
-    localparam MAX_Y = 500;
-    localparam MIN_Y =  144;
+    //pixel coordinate boundaries for VGA display area, based on display_controller.v
+    localparam MAX_X = 784;
+    localparam MIN_X = 143;
+    localparam MAX_Y = 516;
+    localparam MIN_Y =  34;
 
     //Bomberman tile width height
     localparam B_W = 16;
@@ -45,29 +45,29 @@ module bomberman
  
 
   
-    // * FSM THAT UPDATES BOMBERMAN'S SPRITE LOCATION *//
+// * FSM THAT UPDATES BOMBERMAN'S SPRITE LOCATION *//
 
-    // Bomberman sprite location -> pixel location with respect to top left corner
-    //Assume user will not press multiple buttons at once, if they do then bomberman goes idle
+// Bomberman sprite location -> pixel location with respect to top left corner
+//Assume user will not press multiple buttons at once, if they do then bomberman goes idle
 
-    localparam Left = 4'b1000;                        
-    localparam Right = 4'b0100; 
-    localparam Up = 4'b0010;
-    localparam Down = 4'b0001;
-    localparam Idle = 4'b0000;
+localparam Left = 4'b1000;                        
+localparam Right = 4'b0100; 
+localparam Up = 4'b0010;
+localparam Down = 4'b0001;
+localparam Idle = 4'b0000;
 
-    reg [3:0] movement_state;	
-    assign {q_Left, q_Right, q_Up, q_Down} = movement_state;
+   reg [3:0] movement_state;	
+   assign {q_Left, q_Right, q_Up, q_Down} = movement_state;
 
     wire blocked_left, blocked_right, blocked_up, blocked_down;
-    // Assign individual bits
+   // Assign individual bits
     assign blocked_left  = bomberman_blocked[0];
     assign blocked_right = bomberman_blocked[1];
     assign blocked_up    = bomberman_blocked[2];
     assign blocked_down  = bomberman_blocked[3];
    
-    //21 bit counter
-    reg[20:0] counter;
+   //21 bit counter
+   reg[20:0] counter;
  
     always @(posedge clk, posedge C)
         begin
@@ -75,7 +75,7 @@ module bomberman
                 begin
                 //Initialize bomberman to corner of the map
                 b_x     <= MIN_X;                 
-                b_y     <= 400;
+                b_y     <= MIN_Y;
                 //Initialize movement state to idle
                 movement_state <= Idle;
                
@@ -107,7 +107,7 @@ module bomberman
                         //else we stay left
 
                         //RTL
-                        if(!blocked_left && !game_over && (b_x >= LEFT_WALL) && (counter == TIME_LIMIT))
+                        if(!blocked_left && !game_over && (b_x > LEFT_WALL) && (counter == TIME_LIMIT))
                             b_x <= b_x - 1;
                         //else
                            // b_x <= b_x;
@@ -144,7 +144,7 @@ module bomberman
                         //else we stay down
 
                         //RTL
-                        if(!blocked_down && !game_over && (b_y <= BOTTOM_WALL) && (counter==TIME_LIMIT))
+                        if(!blocked_down && !game_over && (b_y < BOTTOM_WALL) && (counter==TIME_LIMIT))
                             b_y <= b_y + 1;
                         //else
                            // b_y <= b_y;
@@ -163,7 +163,7 @@ module bomberman
                         //else we stay up
 
                         //RTL
-                        if(!blocked_up && !game_over && (b_y >= TOP_WALL) && (counter==TIME_LIMIT))
+                        if(!blocked_up && !game_over && (b_y > TOP_WALL) && (counter==TIME_LIMIT))
                             b_y <= b_y - 1;
                         //else
                           //  b_y <= b_y;

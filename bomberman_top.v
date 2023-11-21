@@ -108,7 +108,7 @@ always @ (posedge sys_clk)
                 6'b001000: {vgaR, vgaG, vgaB} <= enemy_rgb;
                 6'b010000: {vgaR, vgaG, vgaB} <= breakable_wall_rgb;
                 6'b100000: {vgaR, vgaG, vgaB} <= bomberman_rgb;
-                default: {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000;
+                default: {vgaR, vgaG, vgaB} <= 12'b0110_1001_1100;
             endcase
         end
         else
