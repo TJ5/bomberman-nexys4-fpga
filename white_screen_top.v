@@ -11,12 +11,25 @@ assign {MemOE, MemWR, RamCS, QuadSpiFlashCS} = 4'b1111;
 wire[9:0] hc, vc;
 wire sys_clk;
 assign sys_clk = ClkPort;
+wire bright;
 
 display_controller dc
-    (.clk(sys_clk), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc));
+    (.clk(sys_clk), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc), .bright(bright));
 
-assign vgaR = 4'b1111;
-assign vgaB = 4'b1111;
-assign vgaG = 4'b1111;
+reg[11:0] rgb_data;
+always @(posedge sys_clk)
+begin
+    if (bright == 1)
+    begin
+        rgb_data <= 12'b111111111111;
+    end
+    else
+    begin
+        rgb_data <= 12'b000000000000;
+    end
+end
+assign vgaR = rgb_data[11:8];
+assign vgaB = rgb_data[3:0];
+assign vgaG = rgb_data[7:4];
 
 endmodule
