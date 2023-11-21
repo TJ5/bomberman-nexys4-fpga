@@ -5,7 +5,7 @@ module bomberman_top (
 	input BtnC,                      // the center button (this is our reset in most of our designs)
     //VGA signals
     output hSync, vSync, 
-    output [3:0] vgaR, vgaG, vgaB
+    output reg [3:0] vgaR, vgaG, vgaB
 
     );
 
@@ -41,10 +41,8 @@ wire        Middle_DPB;
 //VGA pixel
 wire[9:0] hc, vc;
 
-reg [3:0]
-    vgaR,
-    vgaG,
-    vgaB;
+wire bright; 
+
 //Bomberman location
 wire [9:0] b_x, b_y;
 
@@ -89,7 +87,7 @@ debouncer #(.N_dc(25)) debouncer_middle
 
 //Display Controller
 display_controller dc
-    (.clk(sys_clk), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc));
+    (.clk(sys_clk), .hSync(hSync), .vSync(vSync), .hCount(hc), .vCount(vc), .bright(bright));
 
 //TODO instantiate modules
 
@@ -101,14 +99,19 @@ bomberman bm
 
 always @ (posedge sys_clk)
     begin
-        case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
-            6'b000001: {vgaR, vgaB, vgaG} <= unbreakable_wall_rgb;
-            6'b000010: {vgaR, vgaB, vgaG} <= explosion_rgb;
-            6'b000100: {vgaR, vgaB, vgaG} <= bomb_rgb;
-            6'b001000: {vgaR, vgaB, vgaG} <= enemy_rgb;
-            6'b010000: {vgaR, vgaB, vgaG} <= breakable_wall_rgb;
-            6'b100000: {vgaR, vgaB, vgaG} <= bomberman_rgb;
-            default: {vgaR, vgaB, vgaG} <= 12'b000000000000;
-        endcase
+        if (bright == 1)
+        begin
+            case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
+                6'b000001: {vgaR, vgaG, vgaB} <= unbreakable_wall_rgb;
+                6'b000010: {vgaR, vgaG, vgaB} <= explosion_rgb;
+                6'b000100: {vgaR, vgaG, vgaB} <= bomb_rgb;
+                6'b001000: {vgaR, vgaG, vgaB} <= enemy_rgb;
+                6'b010000: {vgaR, vgaG, vgaB} <= breakable_wall_rgb;
+                6'b100000: {vgaR, vgaG, vgaB} <= bomberman_rgb;
+                default: {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000;
+            endcase
+        end
+        else
+            {vgaR, vgaG, vgaB} <= 12'b0000_0000_0000;
     end
 endmodule
