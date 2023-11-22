@@ -51,8 +51,7 @@ reg game_over;
 
 //Bomberman blocked
 
-reg [3:0] bomberman_blocked = 4'b0000;
-
+wire [3:0] bomberman_blocked;
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
@@ -96,6 +95,10 @@ bomberman bm
     .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .game_over(game_over), 
     .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb),
     .bomberman_on(bomberman_rgb_en));
+
+box_top box_top
+    (.clk(sys_clk), .reset(Reset), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), 
+    .box_on(breakable_wall_rgb_en), .bomberman_blocked(bomberman_blocked), .rgb_out(breakable_wall_rgb));
 
 always @ (posedge sys_clk)
     begin
