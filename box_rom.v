@@ -22,6 +22,6 @@ always @*
     case ({row_reg, col_reg})
         
 		
-		default: color_data = 12'b1111_0000_1111;
+		default: color_data = 12'b1111_0000_0000; //Just make them red blocks for now
 	endcase
 endmodule

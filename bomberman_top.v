@@ -52,6 +52,7 @@ reg game_over;
 //Bomberman blocked
 
 wire [3:0] bomberman_blocked;
+assign bomberman_blocked = 4'b0000;
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
