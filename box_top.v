@@ -19,6 +19,8 @@ module box_top(
     wire[9:0] box_x[0:NUM_WALLS - 1]; //Array of box x locations
     wire[9:0] box_y[0:NUM_WALLS - 1]; //Array of box y locations
     reg[NUM_WALLS:0] boxes_on; //Array of box on signals
+
+    reg [9:0] row, col; //Row and column of current pixel in sprite
     integer i;
 
     assign box_x[0] = 10'd159;
@@ -38,41 +40,16 @@ module box_top(
             end
         end
     end
-    /*
-    wire box0_on, box1_on;
-    wire [9:0] box0_row, box0_col, box1_row, box1_col;
-    wire[3:0] box0_blocked, box1_blocked;
-    //Instantiate box objects
-    box box_0
-        (.clk(clk), .b_x(b_x), .b_y(b_y), .v_x(v_x), .v_y(v_y), 
-        .w_x(box_x[0]), .w_y(box_y[0]), .box_on(box0_on), .bomberman_blocked(box0_blocked), 
-        .row(box0_row), .col(box0_col));
-
-    box box_1
-        (.clk(clk), .b_x(b_x), .b_y(b_y), .v_x(v_x), .v_y(v_y), 
-        .w_x(box_x[1]), .w_y(box_y[1]), .box_on(box1_on), .bomberman_blocked(box1_blocked),
-        .row(box1_row), .col(box1_col));
-    */
-
-
-    reg [9:0] row, col;
+    
+    //Instantiate box rom
     box_rom box_rom
         (.clk(clk), .row(row), .col(col), .color_data(rgb_out));
     
-    /*
-    always @ (posedge clk)
-    begin
-        case ({box1_on, box0_on})
-            2'b01: {row, col} <= {box0_row, box0_col};
-            2'b10: {row, col} <= {box1_row, box1_col};
-            default: {row, col} <= {10'b1111111111, 10'b1111111111}; //Out of bounds value
-        endcase
-    end
-    */
-
+    
     //For now just make blocked 0
     assign bomberman_blocked = 4'b0000;
 
+    //Short form for doing a bitwise or on all the boxes_on signals
     assign box_on = |boxes_on;
     
 endmodule
