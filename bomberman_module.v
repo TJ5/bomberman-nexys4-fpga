@@ -69,9 +69,9 @@ localparam Idle = 4'b0000;
    //21 bit counter
    reg[20:0] counter;
  
-    always @(posedge clk, posedge C)
+    always @(posedge clk, posedge reset)
         begin
-            if (C)
+            if (reset)
                 begin
                 //Initialize bomberman to corner of the map
                 b_x     <= MIN_X;                 
