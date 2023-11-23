@@ -28,7 +28,9 @@ module box_top(
 
     assign box_x[1] = 10'd175;
     assign box_y[1] = 10'd65;
+    //... add more boxes here
 
+    
     always @ (posedge clk)
     begin
         for (i = 0; i < NUM_WALLS; i = i + 1)
