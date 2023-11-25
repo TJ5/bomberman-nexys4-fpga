@@ -34,42 +34,49 @@ module box_top(
     //... add more boxes here
 
 
-    always @ (posedge clk)
+    always @ (posedge clk, posedge reset)
     begin
-        bomberman_blocked <= 4'b0000;
-        for (i = 0; i < NUM_WALLS; i = i + 1)
+        if (reset)
         begin
-            boxes_on[i] <= (v_x >= box_x[i]) && (v_x <= box_x[i] + W_W - 1) && (v_y >= box_y[i]) && (v_y <= box_y[i] + W_H - 1);
-            if (boxes_on[i] == 1)
-            begin
-                {row, col} <= {v_x - box_x[i], v_y - box_y[i]};
-            end
+            bomberman_blocked <= 4'b0000;
 
-            //Bomberman blocked logic
+        end
+        else begin
+            bomberman_blocked <= 4'b0000;
+            for (i = 0; i < NUM_WALLS; i = i + 1)
+            begin
+                boxes_on[i] <= (v_x >= box_x[i]) && (v_x <= box_x[i] + W_W - 1) && (v_y >= box_y[i]) && (v_y <= box_y[i] + W_H - 1);
+                if (boxes_on[i] == 1)
+                begin
+                    {row, col} <= {v_x - box_x[i], v_y - box_y[i]};
+                end
 
-            //Left
-            if ((b_x >= box_x[i]) && (b_x <= box_x[i] + W_W))
-            begin
-                if (((b_y + B_H > box_y[i]) && (b_y + B_H) <= box_y[i] + W_H) || ((b_y >= box_y[i]) && (b_y < box_y[i] + W_H)))
-                    bomberman_blocked[0] <= 1;
-            end
-            //Right
-            if ((b_x <= box_x[i]) && (b_x >= box_x[i] - B_W))
-            begin
-                if (((b_y + B_H > box_y[i]) && (b_y + B_H) <= box_y[i] + W_H) || ((b_y >= box_y[i]) && (b_y < box_y[i] + W_H)))
-                    bomberman_blocked[1] <= 1;
-            end
-            //Up
-            if ((b_y >= box_y[i]) && (b_y <= box_y[i] + W_H))
-            begin
-                if (((b_x + B_W > box_x[i]) && (b_x + B_W <= box_x[i] + W_W)) || ((b_x >= box_x[i]) && (b_x < box_x[i] + W_W)))
-                    bomberman_blocked[2] <= 1;
-            end
-            //Down
-            if ((b_y <= box_y[i]) && (b_y + B_H >= box_y[i]))
-            begin
-                if (((b_x + B_W > box_x[i]) && (b_x + B_W <= box_x[i] + W_W)) || ((b_x >= box_x[i]) && (b_x < box_x[i] + W_W)))
-                bomberman_blocked[3] <= 1;
+                //Bomberman blocked logic
+
+                //Left
+                if ((b_x >= box_x[i]) && (b_x <= box_x[i] + W_W))
+                begin
+                    if (((b_y + B_H > box_y[i]) && (b_y + B_H) <= box_y[i] + W_H) || ((b_y >= box_y[i]) && (b_y < box_y[i] + W_H)))
+                        bomberman_blocked[0] <= 1;
+                end
+                //Right
+                if ((b_x <= box_x[i]) && (b_x >= box_x[i] - B_W))
+                begin
+                    if (((b_y + B_H > box_y[i]) && (b_y + B_H) <= box_y[i] + W_H) || ((b_y >= box_y[i]) && (b_y < box_y[i] + W_H)))
+                        bomberman_blocked[1] <= 1;
+                end
+                //Up
+                if ((b_y >= box_y[i]) && (b_y <= box_y[i] + W_H))
+                begin
+                    if (((b_x + B_W > box_x[i]) && (b_x + B_W <= box_x[i] + W_W)) || ((b_x >= box_x[i]) && (b_x < box_x[i] + W_W)))
+                        bomberman_blocked[2] <= 1;
+                end
+                //Down
+                if ((b_y <= box_y[i]) && (b_y + B_H >= box_y[i]))
+                begin
+                    if (((b_x + B_W > box_x[i]) && (b_x + B_W <= box_x[i] + W_W)) || ((b_x >= box_x[i]) && (b_x < box_x[i] + W_W)))
+                    bomberman_blocked[3] <= 1;
+                end
             end
         end
     end

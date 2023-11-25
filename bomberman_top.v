@@ -3,6 +3,7 @@ module bomberman_top (
     input ClkPort,                           // the 100 MHz incoming clock signal
 	input BtnL, BtnU, BtnD, BtnR,            // the Left, Up, Down, and the Right buttons 		BtnL, BtnR,
 	input BtnC,                      // the center button (this is our reset in most of our designs)
+    input Sw0,
     //VGA signals
     output hSync, vSync, 
     output reg [3:0] vgaR, vgaG, vgaB
@@ -13,7 +14,7 @@ module bomberman_top (
 reg [26:0]	DIV_CLK;
 wire        Reset, ClkPort;
 wire		sys_clk;
-
+assign Reset = Sw0;
 //RGB Signals
 wire [11:0] bomberman_rgb,
             breakable_wall_rgb,
