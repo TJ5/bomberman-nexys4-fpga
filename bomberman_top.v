@@ -56,6 +56,9 @@ wire [9:0] exploding_bomb_x,exploding_bomb_y;
 //Active Explosion location
 wire [9:0] explosion_x,explosion_y;
 
+//new explosion
+wire flag;
+
 //Game over
 reg game_over;
 
@@ -110,17 +113,18 @@ bomberman bm
 bomb bmb
 (
     .clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), .C(Middle_DPB),
-    .bomb_x(bomb_x), .bomb_y(bomb_y), .bomb_on(bomb_rgb_en),  .rgb_out(bomb_rgb), .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y)
+    .bomb_x(bomb_x), .bomb_y(bomb_y), .bomb_on(bomb_rgb_en),  .rgb_out(bomb_rgb), 
+    .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y)
 );
 
-//explosion bme
+explosion bme
 
-//(
-  //  .clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc),
-   // .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y), 
-    //.exploding_x(exploding_x), .exploding_y(exploding_y), .bomb_explosion_on(explosion_rgb_en),  
-   // .rgb_out(explosion_rgb)
-//);
+(
+    .clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc),
+    .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y), .C(Middle_DPB),
+    .exploding_x(exploding_x), .exploding_y(exploding_y), .bomb_explosion_on(explosion_rgb_en),  
+    .rgb_out(explosion_rgb)
+);
 
 always @ (posedge sys_clk)
     begin
@@ -133,7 +137,9 @@ always @ (posedge sys_clk)
                 6'b001000: {vgaR, vgaG, vgaB} <= enemy_rgb;
                 6'b010000: {vgaR, vgaG, vgaB} <= breakable_wall_rgb;
                 6'b100000: {vgaR, vgaG, vgaB} <= bomberman_rgb;
+                6'b100010: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY when EXPLOSION SPRITE AND BOBMERMAN ON
                 6'b100100: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY IMAGE CASE BOMB AND BOMBERMAN ON SAME LOCATION
+                6'b100110: {vgaR, vgaG, vgaB} <= explosion_rgb; //HANDLE OVERLAY IMAGE WHEN BOmberman, bomb,explosion on same tile
                 default: {vgaR, vgaG, vgaB} <= 12'b0110_1001_1100;
             endcase
         end
