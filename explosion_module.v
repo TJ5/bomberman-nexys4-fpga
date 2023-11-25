@@ -47,54 +47,53 @@ module explosion
 
     always @(posedge clk, posedge reset)
     begin    
-            if (reset)
+        if (reset)
+        begin
+            //Initialize all exploding sites to zero
+            for (k = 0; k < 13; k = k + 1) 
             begin
-                //Initialize all exploding sites to zero
-                for (k = 0; k < 13; k = k + 1) 
+                //NOTE: We will need to add an if condition to check if the radius is within the screen
+                explosion_x_sites[k] <= 0;
+                explosion_y_sites[k] <= 0;
+            end
+        end
+        else
+        begin
+            //In the current clock, we need to update the 1D array that has all the exploding sites...
+            //using the exploding bomb location
+            //NOTE: This means that the 1D array is updated after 1 clock when bomb has exploded
+            for (k = 0; k < 13; k = k + 1) 
+            begin
+                //NOTE: We will need to add an if condition to check if the radius is within the screen
+                if(k==0)
                 begin
-                    //NOTE: We will need to add an if condition to check if the radius is within the screen
-                    explosion_x_sites[k] <= 0;
-                    explosion_y_sites[k] <= 0;
+                    explosion_x_sites[k] <= exploding_bomb_x;
+                    explosion_y_sites[k] <= exploding_bomb_y;
+                end
+                else if(k<4)
+                begin
+                    explosion_x_sites[k] <= exploding_bomb_x;
+                    explosion_y_sites[k] <= exploding_bomb_y - (16*k);
+                end
+                else if(k<7)
+                begin
+                    explosion_x_sites[k] <= exploding_bomb_x;
+                    explosion_y_sites[k] <= exploding_bomb_y + (16*(k-3));
+                end
+                else if(k<10)
+                begin
+                    explosion_x_sites[k] <= exploding_bomb_x + (16*(k-6));
+                    explosion_y_sites[k] <= exploding_bomb_y;
+                end
+                else if(k<13)
+                begin
+                    explosion_x_sites[k] <= exploding_bomb_x - (16*(k-9));
+                    explosion_y_sites[k] <= exploding_bomb_y;
                 end
             end
-            else
-
-                begin
-                    //In the current clock, we need to update the 1D array that has all the exploding sites...
-                    //using the exploding bomb location
-                    //NOTE: This means that the 1D array is updated after 1 clock when bomb has exploded
-                    for (k = 0; k < 13; k = k + 1) 
-                    begin
-                        //NOTE: We will need to add an if condition to check if the radius is within the screen
-                        if(k==0)
-                        begin
-                            explosion_x_sites[k] <= exploding_bomb_x;
-                            explosion_y_sites[k] <= exploding_bomb_y;
-                        end
-                        else if(k<4)
-                        begin
-                            explosion_x_sites[k] <= exploding_bomb_x;
-                            explosion_y_sites[k] <= exploding_bomb_y - (16*k);
-                        end
-                        else if(k<7)
-                        begin
-                            explosion_x_sites[k] <= exploding_bomb_x;
-                            explosion_y_sites[k] <= exploding_bomb_y + (16*(k-3));
-                        end
-                        else if(k<10)
-                        begin
-                            explosion_x_sites[k] <= exploding_bomb_x + (16*(k-6));
-                            explosion_y_sites[k] <= exploding_bomb_y;
-                        end
-                        else if(k<13)
-                        begin
-                            explosion_x_sites[k] <= exploding_bomb_x - (16*(k-9));
-                            explosion_y_sites[k] <= exploding_bomb_y;
-                        end
-                    end
-                end
-                
         end
+                
+    end
 
    
     integer j;
@@ -102,20 +101,16 @@ module explosion
     //Similar idea to bomb module where this always block is used update the registers that ...
     //used to determine RGB out value
     always @ (posedge clk)
-    
     begin
         for (j = 0; j < 13; j = j + 1)
-        
         begin
             if (((v_x >= explosion_x_sites[j][9:0]) && (v_x <= explosion_x_sites[j][9:0] + EXPLOSION_W - 1) && (v_y >= explosion_y_sites[j][9:0]) && (v_y <= explosion_y_sites[j][9:0] + EXPLOSION_H - 1)))
             begin
-                            exploding_x <=  explosion_x_sites[j][9:0];
-                            exploding_y <=  explosion_y_sites[j][9:0];
-
+                exploding_x <=  explosion_x_sites[j][9:0];
+                exploding_y <=  explosion_y_sites[j][9:0];
             end
-           
-         end
-     end
+        end
+    end
      
 
                     
