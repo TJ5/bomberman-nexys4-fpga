@@ -14,7 +14,7 @@ module bomberman_top (
 reg [26:0]	DIV_CLK;
 wire        Reset, ClkPort;
 wire		sys_clk;
-
+assign Reset = Sw0;
 //RGB Signals
 wire [11:0] bomberman_rgb,
             breakable_wall_rgb,
@@ -62,10 +62,14 @@ wire flag;
 //Game over
 reg game_over;
 
-//Bomberman blocked
+//Bomberman blocked - [Left, Right, Up, Down] 
+//If the corresponding direction is blocked the bit is set to 1
 
-reg [3:0] bomberman_blocked = 4'b0000;
+wire [3:0] bomberman_blocked_bw; //breakable wall module blocks
+wire [3:0] bomberman_blocked_ubw = 4'b0000; //unbreakable wall module blocks
 
+wire [3:0] bomberman_blocked; //final blocked signal
+assign bomberman_blocked = bomberman_blocked_bw | bomberman_blocked_ubw; 
 
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
@@ -125,6 +129,10 @@ explosion bme
     .exploding_x(exploding_x), .exploding_y(exploding_y), .bomb_explosion_on(explosion_rgb_en),  
     .rgb_out(explosion_rgb)
 );
+
+box_top box_top
+    (.clk(sys_clk), .reset(Reset), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), 
+    .box_on(breakable_wall_rgb_en), .bomberman_blocked(bomberman_blocked_bw), .rgb_out(breakable_wall_rgb));
 
 always @ (posedge sys_clk)
     begin
