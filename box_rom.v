@@ -20,24 +20,8 @@ module box_rom
 
 always @*
     case ({row_reg, col_reg})
-        10'b0000000000: color_data = 12'b011011001100;
-        10'b0000000001: color_data = 12'100001110111;
-        10'b0000000010: color_data = 12'b011011001100;
-        10'b0000000011: color_data = 12'b011011001100;
-        10'b0000000100: color_data = 12'b100001110111;
-        10'b0000000101: color_data = 12'b100001110111;
-        10'b0000000110: color_data = 12'b011011001100;
-        10'b0000000111: color_data = 12'b011011001100;
-        10'b0000001000: color_data = 12'b100001110111;
-        10'b0000001001: color_data = 12'b100001110111;
-        10'b0000001010: color_data = 12'b1000011101110;
-        10'b0000001011: color_data = 12'b011011001100;
-        10'b0000001100: color_data = 12'b011011001100;
-        10'b0000001101: color_data = 12'b011011001100;
-        10'b0000001110: color_data = 12'b100001110111;
-        10'b0000001111: color_data = 12'b100001110111;
-        10'b0000010000: color_data = 12'b100001110111;
+        
 		
-		default: color_data = 12'b001010001111;
+		default: color_data = 12'b1111_0000_0000; //Just make them red blocks for now
 	endcase
 endmodule
