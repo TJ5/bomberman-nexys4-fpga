@@ -2,6 +2,7 @@
 
 module explosion 
 (   input clk,reset,                                    //System Clock, Game Reset
+    input explosion_timer_clk,                         //Clock that is used to update the explosion timer (some clock div)
     input [9:0] b_x, b_y,                              //Bomberman location
     input [9:0] v_x, v_y,                              //Current Pixel location
     input [9:0] exploding_bomb_x, exploding_bomb_y,    //Exploding Bomb location
@@ -49,7 +50,7 @@ module explosion
     reg [7:0] explosion_timer;
 
     //MAX TIME
-    localparam EXPLOSION_MAX_TIME = 255;
+    localparam EXPLOSION_MAX_TIME = 40;
     
 
     always @(posedge clk, posedge reset)

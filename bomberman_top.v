@@ -127,7 +127,7 @@ explosion bme
     .clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc),
     .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y), .C(Middle_DPB),
     .exploding_x(exploding_x), .exploding_y(exploding_y), .bomb_explosion_on(explosion_rgb_en),  
-    .rgb_out(explosion_rgb)
+    .rgb_out(explosion_rgb), .explosion_write_enable(explosion_write_enable), .explosion_timer_clk(DIV_CLK[7])
 );
 
 box_top box_top
