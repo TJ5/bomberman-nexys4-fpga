@@ -8,14 +8,16 @@ module bomb
     output [9:0] bomb_x, bomb_y,                       //Bomb location
     output bomb_on,                                     //Let top module know if current pixel is inside bomb sprite
     output [11:0] rgb_out,       //                       //RGB output
-    output [9:0] exploding_bomb_x, exploding_bomb_y    //Exploding bomb location
+    output [9:0] exploding_bomb_x, exploding_bomb_y,    //Exploding bomb location
+    output explosion_write_enable
 );
     /* INPUTS */
     wire clk, reset;
     wire [9:0] b_x, b_y, v_x, v_y;
     wire C;
 
-    /* OUTPUTS */     
+    /* OUTPUTS */  
+    wire explosion_write_enable;   
     wire bomb_on;
     wire [11:0] rgb_out;
     reg [9:0] bomb_x, bomb_y;
@@ -83,9 +85,11 @@ module bomb
                         active_bombs <= active_bombs -1;
                         exploding_bomb_x <= bomb_x_locations[k][9:0];// set the x coordinate for exploding bomb location
                         exploding_bomb_y <= bomb_y_locations[k][9:0];//set the y coordinate for exploding bomb location
+                        explosion_write_enable <= 1'b1;
                     end
                     else
                         bomb_timer[k] <= bomb_timer[k] + 1;
+                        explosion_write_enable <= 1'b0;
                 end
             end
             case (state)

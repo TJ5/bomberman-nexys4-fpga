@@ -57,7 +57,7 @@ wire [9:0] exploding_bomb_x,exploding_bomb_y;
 wire [9:0] explosion_x,explosion_y;
 
 //new explosion
-wire flag;
+wire explosion_write_enable;
 
 //Game over
 reg game_over;
@@ -118,7 +118,7 @@ bomb bmb
 (
     .clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), .C(Middle_DPB),
     .bomb_x(bomb_x), .bomb_y(bomb_y), .bomb_on(bomb_rgb_en),  .rgb_out(bomb_rgb), 
-    .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y)
+    .exploding_bomb_x(exploding_bomb_x), .exploding_bomb_y(exploding_bomb_y), .explosion_write_enable(explosion_write_enable)
 );
 
 explosion bme

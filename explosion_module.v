@@ -6,11 +6,13 @@ module explosion
     input [9:0] v_x, v_y,                              //Current Pixel location
     input [9:0] exploding_bomb_x, exploding_bomb_y,    //Exploding Bomb location
     input C, //User placed bomb
+    input explosion_write_enable, //New explosion
     output [9:0] exploding_x, exploding_y,                       //Exploding Site location
     output bomb_explosion_on,                                    //Let top module know if current pixel is inside explosion sprite
     output [11:0] rgb_out       //                       //RGB output
 );
     /* INPUTS */
+    wire explosion_write_enable;
     wire clk, reset;
     wire [9:0] b_x, b_y, v_x, v_y;
     wire [9:0] exploding_bomb_x, exploding_bomb_y;
@@ -43,54 +45,79 @@ module explosion
    reg [9:0] explosion_x_sites [0:12];
    reg [9:0] explosion_y_sites [0:12];
 
+    //Timer explosion
+    reg [7:0] explosion_timer;
+
+    //MAX TIME
+    localparam EXPLOSION_MAX_TIME = 255;
     
 
     always @(posedge clk, posedge reset)
     begin    
         if (reset)
         begin
+            explosion_timer <= 0;
             //Initialize all exploding sites to zero
             for (k = 0; k < 13; k = k + 1) 
             begin
                 //NOTE: We will need to add an if condition to check if the radius is within the screen
-                explosion_x_sites[k] <= 0;
-                explosion_y_sites[k] <= 0;
+                explosion_x_sites[k] <= x;
+                explosion_y_sites[k] <= x;
             end
         end
         else
         begin
+          //  explosion_timer <= explosion_timer + 1;
+            if(explosion_timer != EXPLOSION_MAX_TIME)
+            begin 
+                explosion_timer <= explosion_timer + 1;    
             //In the current clock, we need to update the 1D array that has all the exploding sites...
             //using the exploding bomb location
             //NOTE: This means that the 1D array is updated after 1 clock when bomb has exploded
-            for (k = 0; k < 13; k = k + 1) 
-            begin
-                //NOTE: We will need to add an if condition to check if the radius is within the screen
-                if(k==0)
+                for (k = 0; k < 13; k = k + 1) 
                 begin
-                    explosion_x_sites[k] <= exploding_bomb_x;
-                    explosion_y_sites[k] <= exploding_bomb_y;
-                end
-                else if(k<4)
-                begin
-                    explosion_x_sites[k] <= exploding_bomb_x;
-                    explosion_y_sites[k] <= exploding_bomb_y - (16*k);
-                end
-                else if(k<7)
-                begin
-                    explosion_x_sites[k] <= exploding_bomb_x;
-                    explosion_y_sites[k] <= exploding_bomb_y + (16*(k-3));
-                end
-                else if(k<10)
-                begin
-                    explosion_x_sites[k] <= exploding_bomb_x + (16*(k-6));
-                    explosion_y_sites[k] <= exploding_bomb_y;
-                end
-                else if(k<13)
-                begin
-                    explosion_x_sites[k] <= exploding_bomb_x - (16*(k-9));
-                    explosion_y_sites[k] <= exploding_bomb_y;
+                    //NOTE: We will need to add an if condition to check if the radius is within the screen
+                    if(k==0)
+                    begin
+                        explosion_x_sites[k] <= exploding_bomb_x;
+                        explosion_y_sites[k] <= exploding_bomb_y;
+                    end
+                    else if(k<4)
+                    begin
+                        explosion_x_sites[k] <= exploding_bomb_x;
+                        explosion_y_sites[k] <= exploding_bomb_y - (16*k);
+                    end
+                    else if(k<7)
+                    begin
+                        explosion_x_sites[k] <= exploding_bomb_x;
+                        explosion_y_sites[k] <= exploding_bomb_y + (16*(k-3));
+                    end
+                    else if(k<10)
+                    begin
+                        explosion_x_sites[k] <= exploding_bomb_x + (16*(k-6));
+                        explosion_y_sites[k] <= exploding_bomb_y;
+                    end
+                    else if(k<13)
+                    begin
+                        explosion_x_sites[k] <= exploding_bomb_x - (16*(k-9));
+                        explosion_y_sites[k] <= exploding_bomb_y;
+                    end
                 end
             end
+            else
+            begin 
+                for (k = 0; k < 13; k = k + 1) 
+                begin
+                    //NOTE: We will need to add an if condition to check if the radius is within the screen
+                    explosion_x_sites[k] <= x;
+                    explosion_y_sites[k] <= x;
+                end
+            end
+            if(explosion_write_enable)
+            begin
+                explosion_timer <= 0;
+            end
+            
         end
                 
     end
