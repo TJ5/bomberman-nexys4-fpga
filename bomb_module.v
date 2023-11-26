@@ -64,7 +64,8 @@ module bomb
         begin
             i <= 0;
             state <= IDLE;
-            active_bombs <= 0;              
+            active_bombs <= 0;
+            explosion_write_enable <= 0;  
             for (n = 0; n < 6; n = n + 1)
             begin 
                 bomb_x_locations[i][10] <= 1'b0;
@@ -73,6 +74,7 @@ module bomb
         end    
         else 
         begin
+            explosion_write_enable <= 0; //To be overriden as needed
             for (k = 0; k < 6; k = k + 1) 
             begin
                 if ((bomb_x_locations[k][10]) && (bomb_y_locations[k][10])) //if bomb is active add to that bomb's counter
@@ -89,7 +91,6 @@ module bomb
                     end
                     else
                         bomb_timer[k] <= bomb_timer[k] + 1;
-                        explosion_write_enable <= 1'b0;
                 end
             end
             case (state)

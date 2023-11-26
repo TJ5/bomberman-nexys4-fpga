@@ -47,10 +47,10 @@ module explosion
    reg [9:0] explosion_y_sites [0:12];
 
     //Timer explosion
-    reg [7:0] explosion_timer;
+    reg [26:0] explosion_timer;
 
     //MAX TIME
-    localparam EXPLOSION_MAX_TIME = 40;
+    localparam EXPLOSION_MAX_TIME = 4000000;
     
 
     always @(posedge clk, posedge reset)
@@ -68,10 +68,12 @@ module explosion
         end
         else
         begin
-          //  explosion_timer <= explosion_timer + 1;
-            if(explosion_timer != EXPLOSION_MAX_TIME)
-            begin 
-                explosion_timer <= explosion_timer + 1;    
+            if (explosion_write_enable)
+                explosion_timer <= 0;
+            else if (explosion_timer < EXPLOSION_MAX_TIME)
+                explosion_timer <= explosion_timer + 1;
+            if(explosion_timer < EXPLOSION_MAX_TIME)
+            begin
             //In the current clock, we need to update the 1D array that has all the exploding sites...
             //using the exploding bomb location
             //NOTE: This means that the 1D array is updated after 1 clock when bomb has exploded
@@ -113,17 +115,11 @@ module explosion
                     explosion_x_sites[k] <= 0;
                     explosion_y_sites[k] <= 0;
                 end
-            end
-            if(explosion_write_enable)
-            begin
-                explosion_timer <= 0;
-            end
-            
+            end            
         end
                 
     end
 
-   
     integer j;
     
     //Similar idea to bomb module where this always block is used update the registers that ...
@@ -141,7 +137,7 @@ module explosion
     end
      
 
-                    
+
 // * BOMB RGB OUT *//
 assign col = v_x - exploding_x; // column of current pixel within bomb sprite
 assign row = v_y - exploding_y; // row of current pixel within bomb sprite
@@ -153,7 +149,7 @@ explosion_rom explosion_rom_unit(.clk(clk), .row(row), .col(col), .color_data(rg
 
            
 // Notify top_module that current pixel is inside of bomb's sprite, so it should display the rgb_out from the bomb module 
-assign bomb_explosion_on =  ((v_x >= exploding_x) && (v_x <= exploding_x + EXPLOSION_W - 1) && (v_y >= exploding_y) && (v_y <= exploding_y + EXPLOSION_H - 1)); 
+assign bomb_explosion_on =  ((v_x >= exploding_x) && (v_x <= exploding_x + EXPLOSION_W - 1) && (v_y >= exploding_y) && (v_y <= exploding_y + EXPLOSION_H - 1) && (explosion_timer < EXPLOSION_MAX_TIME)); 
 
 
 
