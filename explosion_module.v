@@ -61,8 +61,8 @@ module explosion
             for (k = 0; k < 13; k = k + 1) 
             begin
                 //NOTE: We will need to add an if condition to check if the radius is within the screen
-                explosion_x_sites[k] <= x;
-                explosion_y_sites[k] <= x;
+                explosion_x_sites[k] <= 0;
+                explosion_y_sites[k] <= 0;
             end
         end
         else
@@ -109,8 +109,8 @@ module explosion
                 for (k = 0; k < 13; k = k + 1) 
                 begin
                     //NOTE: We will need to add an if condition to check if the radius is within the screen
-                    explosion_x_sites[k] <= x;
-                    explosion_y_sites[k] <= x;
+                    explosion_x_sites[k] <= 0;
+                    explosion_y_sites[k] <= 0;
                 end
             end
             if(explosion_write_enable)

@@ -9,7 +9,7 @@ module bomb
     output bomb_on,                                     //Let top module know if current pixel is inside bomb sprite
     output [11:0] rgb_out,       //                       //RGB output
     output [9:0] exploding_bomb_x, exploding_bomb_y,    //Exploding bomb location
-    output explosion_write_enable
+    output reg explosion_write_enable
 );
     /* INPUTS */
     wire clk, reset;
@@ -17,7 +17,7 @@ module bomb
     wire C;
 
     /* OUTPUTS */  
-    wire explosion_write_enable;   
+    reg explosion_write_enable;   
     wire bomb_on;
     wire [11:0] rgb_out;
     reg [9:0] bomb_x, bomb_y;
