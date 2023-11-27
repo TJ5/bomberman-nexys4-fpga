@@ -77,10 +77,10 @@ module box_top(
                     //Explosion resembles a plus sign - exploded_temp_x represents the horizontal part of the plus sign
                     //exploded_temp_y represents the vertical part
                     exploded_temp_x = ((box_x[i] >= e_x - E_WN) && (box_x[i] <= e_x + E_WP) && 
-                        ((box_y[i] >= e_y) && (box_y[i] <= e_y + E_Width)) || ((box_y[i] >= e_y - E_Width) && (box_y[i] <= e_y)));
+                        (((box_y[i] >= e_y) && (box_y[i] <= e_y + E_Width)) || ((box_y[i] >= e_y - E_Width) && (box_y[i] <= e_y))));
                     
                     exploded_temp_y = ((box_y[i] >= e_y - E_HN) && (box_y[i] <= e_y + E_HP) && 
-                        ((box_x[i] >= e_x) && (box_x[i] <= e_x + E_Width)) || ((box_x[i] >= e_x - E_Width) && (box_x[i] <= e_x)));
+                        (((box_x[i] >= e_x) && (box_x[i] <= e_x + E_Width)) || ((box_x[i] >= e_x - E_Width) && (box_x[i] <= e_x))));
 
                     //Invert result because we want 0 if box is exploded, 1 if it still exists
                     //Or with inverted boxes_exploded[i] so that if the box is already exploded it will not reappear
