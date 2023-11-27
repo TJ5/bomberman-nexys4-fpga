@@ -132,7 +132,8 @@ explosion bme
 
 box_top box_top
     (.clk(sys_clk), .reset(Reset), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), 
-    .box_on(breakable_wall_rgb_en), .bomberman_blocked(bomberman_blocked_bw), .rgb_out(breakable_wall_rgb));
+    .box_on(breakable_wall_rgb_en), .bomberman_blocked(bomberman_blocked_bw), .rgb_out(breakable_wall_rgb),
+    .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable));
 
 always @ (posedge sys_clk)
     begin
