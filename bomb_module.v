@@ -17,7 +17,6 @@ module bomb
     wire C;
 
     /* OUTPUTS */  
-    reg explosion_write_enable;   
     wire bomb_on;
     wire [11:0] rgb_out;
     reg [9:0] bomb_x, bomb_y;

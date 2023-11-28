@@ -13,7 +13,7 @@ module box_top(
 
 );
     //Number of walls in the game
-    localparam NUM_WALLS = 2;
+    localparam NUM_WALLS = 12;
 
     //Wall tile width height
     localparam W_W = 16;
@@ -41,11 +41,41 @@ module box_top(
     integer i;
     
     //Box Locations
-    assign box_x[0] = 10'd160;
-    assign box_y[0] = 10'd50;
+    assign box_x[0] = 10'd300;
+    assign box_y[0] = 10'd100;
 
-    assign box_x[1] = 10'd177;
-    assign box_y[1] = 10'd67;
+    assign box_x[1] = 10'd316;
+    assign box_y[1] = 10'd100;
+
+    assign box_x[2] = 10'd332;
+    assign box_y[2] = 10'd100;
+
+    assign box_x[3] = 10'd348;
+    assign box_y[3] = 10'd100;
+
+    assign box_x[4] = 10'd300;
+    assign box_y[4] = 10'd116;
+
+    assign box_x[5] = 10'd348;
+    assign box_y[5] = 10'd116;
+
+    assign box_x[6] = 10'd300;
+    assign box_y[6] = 10'd132;
+
+    assign box_x[7] = 10'd348;
+    assign box_y[7] = 10'd132;
+
+    assign box_x[8] = 10'd300;
+    assign box_y[8] = 10'd148;
+    
+    assign box_x[9] = 10'd316;
+    assign box_y[9] = 10'd148;
+
+    assign box_x[10] = 10'd332;
+    assign box_y[10] = 10'd148;
+
+    assign box_x[11] = 10'd348;
+    assign box_y[11] = 10'd148;
     //... add more boxes here
 
 

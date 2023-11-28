@@ -60,7 +60,7 @@ wire [9:0] explosion_x,explosion_y;
 wire explosion_write_enable;
 
 //Game over
-reg game_over;
+wire game_over;
 
 //Bomberman blocked - [Left, Right, Up, Down] 
 //If the corresponding direction is blocked the bit is set to 1
@@ -110,7 +110,8 @@ display_controller dc
 
 bomberman bm 
     (.clk(sys_clk), .reset(Sw0), .L(Left_DPB), .R(Right_DPB), .U(Up_DPB), 
-    .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .game_over(game_over), 
+    .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), 
+    .game_over(game_over), .explosion_SCEN(explosion_write_enable),
     .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb),
     .bomberman_on(bomberman_rgb_en));
    
@@ -139,18 +140,23 @@ always @ (posedge sys_clk)
     begin
         if (bright == 1)
         begin
-            case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
-                6'b000001: {vgaR, vgaG, vgaB} <= unbreakable_wall_rgb;
-                6'b000010: {vgaR, vgaG, vgaB} <= explosion_rgb;
-                6'b000100: {vgaR, vgaG, vgaB} <= bomb_rgb;
-                6'b001000: {vgaR, vgaG, vgaB} <= enemy_rgb;
-                6'b010000: {vgaR, vgaG, vgaB} <= breakable_wall_rgb;
-                6'b100000: {vgaR, vgaG, vgaB} <= bomberman_rgb;
-                6'b100010: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY when EXPLOSION SPRITE AND BOBMERMAN ON
-                6'b100100: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY IMAGE CASE BOMB AND BOMBERMAN ON SAME LOCATION
-                6'b100110: {vgaR, vgaG, vgaB} <= explosion_rgb; //HANDLE OVERLAY IMAGE WHEN BOmberman, bomb,explosion on same tile
-                default: {vgaR, vgaG, vgaB} <= 12'b0110_1001_1100;
-            endcase
+            if (game_over) begin
+                {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000;
+            end
+            else begin
+                case ({bomberman_rgb_en, breakable_wall_rgb_en, enemy_rgb_en, bomb_rgb_en, explosion_rgb_en, unbreakable_wall_rgb_en})
+                    6'b000001: {vgaR, vgaG, vgaB} <= unbreakable_wall_rgb;
+                    6'b000010: {vgaR, vgaG, vgaB} <= explosion_rgb;
+                    6'b000100: {vgaR, vgaG, vgaB} <= bomb_rgb;
+                    6'b001000: {vgaR, vgaG, vgaB} <= enemy_rgb;
+                    6'b010000: {vgaR, vgaG, vgaB} <= breakable_wall_rgb;
+                    6'b100000: {vgaR, vgaG, vgaB} <= bomberman_rgb;
+                    6'b100010: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY when EXPLOSION SPRITE AND BOBMERMAN ON
+                    6'b100100: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY IMAGE CASE BOMB AND BOMBERMAN ON SAME LOCATION
+                    6'b100110: {vgaR, vgaG, vgaB} <= explosion_rgb; //HANDLE OVERLAY IMAGE WHEN BOmberman, bomb,explosion on same tile
+                    default: {vgaR, vgaG, vgaB} <= 12'b0110_1001_1100;
+                endcase
+            end
         end
         else
             {vgaR, vgaG, vgaB} <= 12'b0000_0000_0000;
