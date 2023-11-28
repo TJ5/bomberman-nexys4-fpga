@@ -5,7 +5,7 @@ module bomberman
     input [9:0] e_x, e_y,                     //Explosion x,y
     input explosion_SCEN,               //Explosion single clock enable pulse
     input [3:0] bomberman_blocked,      //bomberman is allowed to move? -> Comes from B_compare module
-    input death_signal
+    input death_signal,
     output reg game_over,                    //game is over? -> Comes from top module
     output [9:0] b_x, b_y,              //top left corner pixel location of bomberman sprite -> Goes to Bomberman_Rom_module
     output bomberman_on,                //current pixel location is inside bomberman sprite? -> Goes to Top_module 
