@@ -146,7 +146,7 @@ localparam Idle = 4'b0000;
                         //else we stay right
 
                         //RTL
-                        if(!blocked_right && !game_over && (b_x <= RIGHT_WALL) && (counter== TIME_LIMIT))
+                        if(!blocked_right && !game_over && (b_x < RIGHT_WALL) && (counter== TIME_LIMIT))
                             b_x <= b_x + 1;
                        // else
                             //b_x <= b_x;
