@@ -92,11 +92,11 @@ localparam Idle = 4'b0000;
                 if (explosion_SCEN) begin
                     //Explosion resembles a plus sign - exploded_temp_x represents the horizontal part of the plus sign
                     //exploded_temp_y represents the vertical part
-                    exploded_temp_x = ((b_x >= e_x - E_WN) && (b_x <= e_x + E_WP) && 
-                        (((b_y >= e_y) && (b_y <= e_y + E_Width)) || ((b_y >= e_y - E_Width) && (b_y <= e_y))));
+                    exploded_temp_x = ((b_x + B_W >= e_x - E_WN) && (b_x <= e_x + E_WP) && 
+                        (((b_y >= e_y) && (b_y <= e_y + E_Width)) || ((b_y + B_H >= e_y - E_Width) && (b_y <= e_y))));
                     
-                    exploded_temp_y = ((b_y >= e_y - E_HN) && (b_y <= e_y + E_HP) && 
-                        (((b_x >= e_x) && (b_x <= e_x + E_Width)) || ((b_x >= e_x - E_Width) && (b_x <= e_x))));
+                    exploded_temp_y = ((b_y <= e_y + E_HN) && (b_y + B_H >= e_y - E_HP) && 
+                        (((b_x >= e_x) && (b_x <= e_x + E_Width)) || ((b_x + B_W >= e_x) && (b_x + B_W <= e_x + E_Width))));
 
                     game_over <= (game_over || exploded_temp_x || exploded_temp_y);
                 end
