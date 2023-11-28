@@ -70,7 +70,7 @@ wire [9:0] explosion_x,explosion_y;
 wire explosion_write_enable;
 
 //Game over
-reg game_over;
+wire game_over;
 
 // Send start enemy movement signal
 wire enemy_start;
@@ -195,37 +195,37 @@ assign death_signal = death_signal_1 || death_signal_2 || death_signal_3 || deat
 
 enemy em_1 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_1), .game_over(game_over), .death_signal(death_signal_1), 
-    .enemy_start(enemy_start), .set_x(sx_1),.set_y(sy_1), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_1), .death_signal(death_signal_1), 
+    .enemy_start(enemy_start), .set_x(sx_1),.set_y(sy_1), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en_1));
 
 enemy em_2 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_2), .game_over(game_over), .death_signal(death_signal_2), 
-    .enemy_start(enemy_start), .set_x(sx_2),.set_y(sy_2), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_2),  .death_signal(death_signal_2), 
+    .enemy_start(enemy_start), .set_x(sx_2),.set_y(sy_2), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en_2));
     
 enemy em_3 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_3), .game_over(game_over), .death_signal(death_signal_3), 
-    .enemy_start(enemy_start), .set_x(sx_3),.set_y(sy_3), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_3), .death_signal(death_signal_3), 
+    .enemy_start(enemy_start), .set_x(sx_3),.set_y(sy_3), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en_3));
 
 enemy em_4 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_4), .game_over(game_over), .death_signal(death_signal_4), 
-    .enemy_start(enemy_start), .set_x(sx_4),.set_y(sy_4), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_4), .death_signal(death_signal_4), 
+    .enemy_start(enemy_start), .set_x(sx_4),.set_y(sy_4), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en_4));
 
 enemy em_5 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_5), .game_over(game_over), .death_signal(death_signal_5), 
-    .enemy_start(enemy_start), .set_x(sx_5),.set_y(sy_5), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_5),  .death_signal(death_signal_5), 
+    .enemy_start(enemy_start), .set_x(sx_5),.set_y(sy_5), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en_5));
 enemy em_6 
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
-    .rgb_out(enemy_rgb_6), .game_over(game_over), .death_signal(death_signal_6), 
-    .enemy_start(enemy_start), .set_x(sx_6),.set_y(sy_6), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable),
+    .rgb_out(enemy_rgb_6), .death_signal(death_signal_6), 
+    .enemy_start(enemy_start), .set_x(sx_6),.set_y(sy_6), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
     .enemy_on(enemy_rgb_en));
 
 
