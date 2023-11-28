@@ -3,7 +3,7 @@ module enemy
     input v_x, v_y,                                     //current pixel location -> Comes from vga_sync module
     input [3:0] enemy_blocked,                                    //bomberman is allowed to move? -> Comes from B_compare module
     input [9:0] b_x, b_y,                               //bomberman location
-    input game_over,                                    //game is over? -> Comes from top module
+    //input game_over,                                    //game is over? -> Comes from top module
     input enemy_start,
     input [9:0] set_x,
     input [9:0] set_y,
@@ -28,7 +28,7 @@ module enemy
 
     /* OUTPUTS */     
     wire enemy_on;
-    wire game_over;
+   // wire game_over;
     reg [9:0] enemy_x, enemy_y; 
     wire [11:0] rgb_out;
 
@@ -133,7 +133,7 @@ localparam Idle = 4'b0000;
                         //else we stay left
 
                         //RTL
-                        if(!blocked_left && !game_over && (enemy_x > LEFT_WALL) && (counter == TIME_LIMIT))
+                        if(!blocked_left  && (enemy_x > LEFT_WALL) && (counter == TIME_LIMIT))
                             enemy_x <= enemy_x - 1;
                         //else
                            // enemy_x <= enemy_x;
@@ -156,7 +156,7 @@ localparam Idle = 4'b0000;
                             movement_state <= Left;
 
                         //RTL
-                        if(!blocked_right && !game_over && (enemy_x < RIGHT_WALL) && (counter== TIME_LIMIT))
+                        if(!blocked_right  && (enemy_x < RIGHT_WALL) && (counter== TIME_LIMIT))
                             enemy_x <= enemy_x + 1;
                        // else
                             //enemy_x <= enemy_x;
@@ -179,7 +179,7 @@ localparam Idle = 4'b0000;
 
 
                         //RTL
-                        if(!blocked_down && !game_over && (enemy_y < BOTTOM_WALL) && (counter==TIME_LIMIT))
+                        if(!blocked_down &&  (enemy_y < BOTTOM_WALL) && (counter==TIME_LIMIT))
                             enemy_y <= enemy_y + 1;
                         //else
                            // enemy_y <= enemy_y;
@@ -202,7 +202,7 @@ localparam Idle = 4'b0000;
                             movement_state <= Down;
 
                         //RTL
-                        if(!blocked_up && !game_over && (enemy_y > TOP_WALL) && (counter==TIME_LIMIT))
+                        if(!blocked_up && (enemy_y > TOP_WALL) && (counter==TIME_LIMIT))
                             enemy_y <= enemy_y - 1;
                         //else
                           //  enemy_y <= enemy_y;
