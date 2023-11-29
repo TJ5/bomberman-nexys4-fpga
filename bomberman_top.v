@@ -182,8 +182,8 @@ wire [9:0] sx_1, sx_2, sx_3, sx_4,sx_5,sx_6;
 wire [9:0] sy_1,sy_2,sy_3,sy_4,sy_5,sy_6;
 
 //Assigning initial locations;
-assign sx_1 = MAX_X - T_SIZE;
-assign sy_1 = MAX_Y - T_SIZE;
+assign sx_1 = MAX_X - T_SIZE - 300;
+assign sy_1 = MAX_Y - T_SIZE - 300;
 assign sx_2 = MAX_X - T_SIZE - 20;
 assign sy_2 = MAX_Y - T_SIZE - 20;
 assign sx_3 = MAX_X - T_SIZE - 40;
@@ -201,7 +201,9 @@ wire death_signal;
 
 //Send signal that enemy sprite overlaps with bomberman sprite -> life lost , from different enemies
 wire death_signal_1,death_signal_2,death_signal_3,death_signal_4,death_signal_5, death_signal_6;
-
+wire enemy_killed_1, enemy_killed_2, enemy_killed_3, enemy_killed_4, enemy_killed_5, enemy_killed_6;
+wire player_wins;
+assign player_wins = enemy_killed_1 && enemy_killed_2 && enemy_killed_3 && enemy_killed_4 && enemy_killed_5 && enemy_killed_6;
 assign death_signal = death_signal_1 || death_signal_2 || death_signal_3 || death_signal_4 || death_signal_5 || death_signal_6;
 
 
@@ -210,36 +212,36 @@ enemy em_0
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[0]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_1), .death_signal(death_signal_1), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_1),.set_y(sy_1), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_1), .enemy_x(enemy_x[0]), .enemy_y(enemy_y[0]));
+    .enemy_on(enemy_rgb_en_1), .enemy_x(enemy_x[0]), .enemy_y(enemy_y[0]), .enemy_killed(enemy_killed_1));
 
 enemy em_1
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[1]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_2),  .death_signal(death_signal_2), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_2),.set_y(sy_2), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_2), .enemy_x(enemy_x[1]), .enemy_y(enemy_y[1]));
+    .enemy_on(enemy_rgb_en_2), .enemy_x(enemy_x[1]), .enemy_y(enemy_y[1]), .enemy_killed(enemy_killed_2));
     
 enemy em_2
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[2]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_3), .death_signal(death_signal_3), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_3),.set_y(sy_3), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_3), .enemy_x(enemy_x[2]), .enemy_y(enemy_y[2]));
+    .enemy_on(enemy_rgb_en_3), .enemy_x(enemy_x[2]), .enemy_y(enemy_y[2]), .enemy_killed(enemy_killed_3));
 
 enemy em_3
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[3]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_4), .death_signal(death_signal_4), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_4),.set_y(sy_4), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_4), .enemy_x(enemy_x[3]), .enemy_y(enemy_y[3]));
+    .enemy_on(enemy_rgb_en_4), .enemy_x(enemy_x[3]), .enemy_y(enemy_y[3]), .enemy_killed(enemy_killed_4));
 
 enemy em_4
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[4]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_5),  .death_signal(death_signal_5), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_5),.set_y(sy_5), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_5), .enemy_x(enemy_x[4]), .enemy_y(enemy_y[4]));
+    .enemy_on(enemy_rgb_en_5), .enemy_x(enemy_x[4]), .enemy_y(enemy_y[4]), .enemy_killed(enemy_killed_5));
 enemy em_5
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[5]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_6), .death_signal(death_signal_6), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_6),.set_y(sy_6), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en), .enemy_x(enemy_x[5]), .enemy_y(enemy_y[5]));
+    .enemy_on(enemy_rgb_en), .enemy_x(enemy_x[5]), .enemy_y(enemy_y[5]), .enemy_killed(enemy_killed_6));
 
 
 //* Instantiate module for enemy//*
@@ -250,7 +252,11 @@ always @ (posedge sys_clk)
         begin
             if (game_over || death_signal) 
             begin
-                {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000;
+                {vgaR, vgaG, vgaB} <= 12'b1111_0000_0000; //Red = lose
+            end
+            else if (player_wins)
+            begin
+                {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000; //Green = win
             end
             else 
             begin

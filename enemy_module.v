@@ -11,9 +11,10 @@ module enemy
     input [9:0] e_y,
     input explosion_SCEN,
     output [9:0] enemy_x, enemy_y,                                     //enemy location goes to enemy module
-    output enemy_on,                                 //current pixel location is inside bomberman sprite? -> Goes to Top_module 
+    output enemy_on,                                            //current pixel location is inside bomberman sprite? -> Goes to Top_module 
     output [11:0] rgb_out,                                       //color of current pixel within the bomberman sprite -> Goes to Top_module
-    output reg death_signal
+    output reg death_signal,
+    output reg enemy_killed
     );
 
     /* INPUTS */
@@ -65,7 +66,6 @@ module enemy
     //localparam TIME_LIMIT = 1400000;
     localparam TIME_LIMIT = 1400000; //For now make him fast
 
-    reg enemy_killed; //Signal that player killed the enemy
     reg exploded_temp_x, exploded_temp_y; //temp vars for explosion detection
 
   
