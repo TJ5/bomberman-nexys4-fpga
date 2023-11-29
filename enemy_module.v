@@ -267,7 +267,7 @@ assign row = v_y - enemy_y; // row of current pixel within bomberman sprite
 enemy_rom em_rom_unit(.clk(clk), .row(row), .col(col), .color_data(rgb_out));
            
 // Notify top_module that current pixel is inside of bomberman's sprite, so it should display the rgb_out from the bombermman module 
-assign enemy_on = (v_x >= enemy_x) && (v_x <= enemy_x + ENEMY_W - 1) && (v_y >= enemy_y) && (v_y <= enemy_y + ENEMY_H - 1);
+assign enemy_on = (!enemy_killed) && (v_x >= enemy_x) && (v_x <= enemy_x + ENEMY_W - 1) && (v_y >= enemy_y) && (v_y <= enemy_y + ENEMY_H - 1);
 
 
 
