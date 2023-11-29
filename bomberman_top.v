@@ -241,7 +241,7 @@ enemy em_5
     (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[5]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_6), .death_signal(death_signal_6), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_6),.set_y(sy_6), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en), .enemy_x(enemy_x[5]), .enemy_y(enemy_y[5]), .enemy_killed(enemy_killed_6));
+    .enemy_on(enemy_rgb_en_6), .enemy_x(enemy_x[5]), .enemy_y(enemy_y[5]), .enemy_killed(enemy_killed_6));
 
 
 //* Instantiate module for enemy//*
