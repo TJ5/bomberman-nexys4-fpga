@@ -235,7 +235,7 @@ always @ (posedge sys_clk)
     begin
         if (bright == 1)
         begin
-            if (game_over) 
+            if (game_over || death_signal) 
             begin
                 {vgaR, vgaG, vgaB} <= 12'b0000_1111_0000;
             end
@@ -253,9 +253,9 @@ always @ (posedge sys_clk)
                     11'b00100000000: {vgaR, vgaG, vgaB} <= enemy_rgb_4;
                     11'b00010000000: {vgaR, vgaG, vgaB} <= enemy_rgb_5;
                     11'b00001000000: {vgaR, vgaG, vgaB} <= enemy_rgb_6;
-                    11'b00000100010: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY when EXPLOSION SPRITE AND BOBMERMAN ON
-                    11'b00000100100: {vgaR, vgaG, vgaB} <= 12'b1111_1111_1111; //HANDLE OVERLAY IMAGE CASE BOMB AND BOMBERMAN ON SAME LOCATION
-                    11'b00000100110: {vgaR, vgaG, vgaB} <= explosion_rgb; //HANDLE OVERLAY IMAGE WHEN BOmberman, bomb,explosion on same tile
+                    11'b00000100010: {vgaR, vgaG, vgaB} <= bomberman_rgb; //HANDLE OVERLAY when EXPLOSION SPRITE AND BOBMERMAN ON
+                    11'b00000100100: {vgaR, vgaG, vgaB} <= bomberman_rgb; //HANDLE OVERLAY IMAGE CASE BOMB AND BOMBERMAN ON SAME LOCATION
+                    11'b00000100110: {vgaR, vgaG, vgaB} <= bomberman_rgb; //HANDLE OVERLAY IMAGE WHEN BOmberman, bomb,explosion on same tile
                     
                     default: {vgaR, vgaG, vgaB} <= 12'b0110_1001_1100;
                 endcase

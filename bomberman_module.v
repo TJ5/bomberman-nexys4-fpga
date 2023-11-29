@@ -64,7 +64,7 @@ localparam Up = 4'b0010;
 localparam Down = 4'b0001;
 localparam Idle = 4'b0000;
 
-   reg [3:0] movement_state;	
+   reg [3:0] movement_state;
    assign {q_Left, q_Right, q_Up, q_Down} = movement_state;
 
     wire blocked_left, blocked_right, blocked_up, blocked_down;

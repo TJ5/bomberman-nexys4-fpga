@@ -13,9 +13,9 @@ module enemy
     output [9:0] enemy_x, enemy_y,                                     //enemy location goes to enemy module
     output enemy_on,                                 //current pixel location is inside bomberman sprite? -> Goes to Top_module 
     output [11:0] rgb_out,                                       //color of current pixel within the bomberman sprite -> Goes to Top_module
-    output death_signal
+    output reg death_signal
     );
-    
+
     /* INPUTS */
     wire clk, reset;
     wire [9:0] v_x, v_y;
@@ -50,6 +50,9 @@ module enemy
     localparam ENEMY_W = 16;
     localparam ENEMY_H = 16;
     
+    //Bomberman tile width height
+    localparam B_W = 16;
+    localparam B_H = 16;
         
     //Wall locations relative to space taken up by Bomberman
     localparam LEFT_WALL = MIN_X;
@@ -100,10 +103,34 @@ localparam Idle = 4'b0000;
                 enemy_y <= set_y;
                 //Initialize movement state to idle
                 movement_state <= Idle;
+                death_signal <= 0;
                 end
             
-            else
-                       
+            else begin
+                //Left
+                if ((b_x >= enemy_x) && (b_x <= enemy_x + ENEMY_W))
+                begin
+                    if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
+                        death_signal <= 1;
+                end
+                //Right
+                if ((b_x <= enemy_x) && (b_x >= enemy_x - ENEMY_W))
+                begin
+                    if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
+                        death_signal <= 1;
+                end
+                //Up
+                if ((b_y >= enemy_y) && (b_y <= enemy_y + ENEMY_H))
+                begin
+                    if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
+                        death_signal <= 1;
+                end
+                //Down
+                if ((b_y <= enemy_y) && (b_y + B_H >= enemy_y))
+                begin
+                    if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
+                        death_signal <= 1;
+                end
             
             //Deals with enemy movement
                 case (movement_state)
@@ -116,8 +143,7 @@ localparam Idle = 4'b0000;
                         counter <=0;
                         end
                      end
-                  
-                      
+
                         //RTL - b_x and b_y don't need to be updated
           
 
@@ -215,10 +241,11 @@ localparam Idle = 4'b0000;
                         
                     //default:		
 						//movement_state <= Idle;
-                endcase   
+                endcase
+            end
         end
 
-                    
+
 // * BOMBERMAN RGB OUT *//
 assign col = v_x - enemy_x; // column of current pixel within bomberman sprite
 assign row = v_y - enemy_y; // row of current pixel within bomberman sprite
@@ -229,7 +256,6 @@ enemy_rom em_rom_unit(.clk(clk), .row(row), .col(col), .color_data(rgb_out));
 // Notify top_module that current pixel is inside of bomberman's sprite, so it should display the rgb_out from the bombermman module 
 assign enemy_on = (v_x >= enemy_x) && (v_x <= enemy_x + ENEMY_W - 1) && (v_y >= enemy_y) && (v_y <= enemy_y + ENEMY_H - 1);
 
-assign death_signal = ((enemy_x >= b_x) && (enemy_x <= b_x + ENEMY_W - 1) && (enemy_y >= b_y) && (enemy_y <= b_y + ENEMY_H - 1)) || ((b_x >= enemy_x) && (b_x <= enemy_x + ENEMY_W - 1) && (b_y >= enemy_y) && (b_y <= enemy_y + ENEMY_H - 1)); 
 
 
 endmodule

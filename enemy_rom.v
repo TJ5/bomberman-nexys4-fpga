@@ -38,6 +38,6 @@ always @*
         10'b0000001111: color_data = 12'b011011001100;
         10'b0000010000: color_data = 12'b011011001100;
 		
-		default: color_data = 12'b111111111111;;
+		default: color_data = 12'b111111111111;
 	endcase
 endmodule
