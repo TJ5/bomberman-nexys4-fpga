@@ -28,7 +28,7 @@ module enemy
 
     /* OUTPUTS */     
     wire enemy_on;
-   // wire game_over;
+    // wire game_over;
     reg [9:0] enemy_x, enemy_y; 
     wire [11:0] rgb_out;
 
@@ -65,25 +65,25 @@ module enemy
     //localparam TIME_LIMIT = 1400000;
     localparam TIME_LIMIT = 1400000; //For now make him fast
 
- reg enemy_killed; //Signal that player killed the enemy
- reg exploded_temp_x, exploded_temp_y; //temp vars for explosion detection
+    reg enemy_killed; //Signal that player killed the enemy
+    reg exploded_temp_x, exploded_temp_y; //temp vars for explosion detection
 
   
-// * FSM THAT UPDATES Enemy's SPRITE LOCATION *//
+    // * FSM THAT UPDATES Enemy's SPRITE LOCATION *//
 
-// Bomberman sprite location -> pixel location with respect to top left corner
-//Assume user will not press multiple buttons at once, if they do then bomberman goes idle
+    // Bomberman sprite location -> pixel location with respect to top left corner
+    //Assume user will not press multiple buttons at once, if they do then bomberman goes idle
 
-localparam Left = 4'b1000;                        
-localparam Right = 4'b0100; 
-localparam Up = 4'b0010;
-localparam Down = 4'b0001;
-localparam Idle = 4'b0000;
+    localparam Left = 4'b1000;                        
+    localparam Right = 4'b0100; 
+    localparam Up = 4'b0010;
+    localparam Down = 4'b0001;
+    localparam Idle = 4'b0000;
 
    reg [3:0] movement_state;	
    
     wire blocked_left, blocked_right, blocked_up, blocked_down;
-   // Assign individual bits
+    // Assign individual bits
     assign blocked_left  = enemy_blocked[0];
     assign blocked_right = enemy_blocked[1];
     assign blocked_up    = enemy_blocked[2];
@@ -92,8 +92,8 @@ localparam Idle = 4'b0000;
     assign enemy_blocked = 4'b0000; //For Now assume enemy_blocked is never blocked
 
    
-   //21 bit counter
-   reg[20:0] counter;
+    //21 bit counter
+    reg[20:0] counter;
  
     always @(posedge clk, posedge reset)
         begin
@@ -145,7 +145,7 @@ localparam Idle = 4'b0000;
                             death_signal <= 1;
                     end
                 end
-            //Deals with enemy movement
+                //Deals with enemy movement
                 case (movement_state)
                     Idle:
                     begin
