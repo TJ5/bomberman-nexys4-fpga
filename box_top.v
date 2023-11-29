@@ -3,18 +3,32 @@
 
 module box_top(
     input clk,reset,                                    //System Clock, Game Reset
-    input [9:0] b_x, b_y,                              //Bomberman location
-    input [9:0] v_x, v_y,                              //Current Pixel location
-    input [9:0] e_x, e_y,                              //Explosion location
-    input explosion_SCEN,                              //Single clock enable pulse for an explosion occuring
-    output box_on,                                     //Let top module know if current pixel is inside any box sprite
-    output reg [3:0] bomberman_blocked,                     //Blocked directions
-    output [11:0] rgb_out                             //RGB output
+    input [9:0] b_x, b_y,                               //Bomberman location
+    input [9:0] v_x, v_y,                               //Current Pixel location
+    input [9:0] e_x, e_y,                               //Explosion location
+    input [9:0] enemy_x0, enemy_y0,                     //Enemy 0 location
+    input [9:0] enemy_x1, enemy_y1,                     //Enemy 1 location
+    input [9:0] enemy_x2, enemy_y2,                     //Enemy 2 location
+    input [9:0] enemy_x3, enemy_y3,                     //Enemy 3 location
+    input [9:0] enemy_x4, enemy_y4,                     //Enemy 4 location
+    input [9:0] enemy_x5, enemy_y5,                     //Enemy 5 location
+
+    input explosion_SCEN,                               //Single clock enable pulse for an explosion occuring
+    output box_on,                                      //Let top module know if current pixel is inside any box sprite
+    output reg [3:0] bomberman_blocked,                 //Blocked directions
+    output reg [3:0] enemy_blocked0,                    //Blocked directions for enemies
+    output reg [3:0] enemy_blocked1,                    //Blocked directions for enemies
+    output reg [3:0] enemy_blocked2,                    //Blocked directions for enemies
+    output reg [3:0] enemy_blocked3,                    //Blocked directions for enemies
+    output reg [3:0] enemy_blocked4,                    //Blocked directions for enemies
+    output reg [3:0] enemy_blocked5,                    //Blocked directions for enemies
+    output [11:0] rgb_out                               //RGB output
 
 );
     //Number of walls in the game
     localparam NUM_WALLS = 12;
 
+    localparam NUM_ENEMIES = 6;
     //Wall tile width height
     localparam W_W = 16;
     localparam W_H = 16;
@@ -25,6 +39,10 @@ module box_top(
     localparam E_HN = 63;
     localparam E_WN = 48;
     localparam E_Width = 16;
+
+    //Enemy tile width height
+    localparam ENEMY_W = 16;
+    localparam ENEMY_H = 16;
 
     //Bomberman tile width height (should probably be passed in from top module)
     localparam B_W = 16;
@@ -37,8 +55,27 @@ module box_top(
 
     reg exploded_temp_x, exploded_temp_y; //Tempvars to represent the box being exploded 
 
+    wire[9:0] enemies_x[0:NUM_ENEMIES - 1]; //Array of enemy x locations
+    wire[9:0] enemies_y[0:NUM_ENEMIES - 1]; //Array of enemy y locations
+
+    assign enemies_x[0] = enemy_x0;
+    assign enemies_y[0] = enemy_y0;
+    assign enemies_x[1] = enemy_x1;
+    assign enemies_y[1] = enemy_y1;
+    assign enemies_x[2] = enemy_x2;
+    assign enemies_y[2] = enemy_y2;
+    assign enemies_x[3] = enemy_x3;
+    assign enemies_y[3] = enemy_y3;
+    assign enemies_x[4] = enemy_x4;
+    assign enemies_y[4] = enemy_y4;
+    assign enemies_x[5] = enemy_x5;
+    assign enemies_y[5] = enemy_y5;
+
+    reg [3:0] enemies_blocked[0:NUM_ENEMIES - 1]; //Array of enemy blocked signals
+    
+
     reg [9:0] row, col; //Row and column of current pixel in sprite
-    integer i;
+    integer i, j;
     
     //Box Locations
     assign box_x[0] = 10'd300;
@@ -86,9 +123,14 @@ module box_top(
             bomberman_blocked <= 4'b0000;
             for (i = 0; i < NUM_WALLS; i = i + 1)
                 boxes_exploded[i] <= 1;
+            for (j = 0; j < NUM_ENEMIES; j = j + 1)
+                enemies_blocked[j] <= 4'b0000;
         end
         else begin
             bomberman_blocked <= 4'b0000;
+            for (j = 0; j < NUM_ENEMIES; j = j + 1)
+                enemies_blocked[j] <= 4'b0000;
+            
             //Loop through all walls and check if current pixel is inside any of them
             for (i = 0; i < NUM_WALLS; i = i + 1)
             begin
@@ -151,6 +193,40 @@ module box_top(
                         if (((b_x + B_W > box_x[i]) && (b_x + B_W <= box_x[i] + W_W)) || ((b_x >= box_x[i]) && (b_x < box_x[i] + W_W)))
                         bomberman_blocked[3] <= 1;
                     end
+
+                    for (j = 0; j < NUM_ENEMIES; j = j + 1) begin
+                        //Left
+                        if ((enemies_x[j] >= box_x[i]) && (enemies_x[j] <= box_x[i] + W_W))
+                        begin
+                            if (((enemies_y[j] + ENEMY_H > box_y[i]) && (enemies_y[j] + ENEMY_H) <= box_y[i] + W_H) || ((enemies_y[j] >= box_y[i]) && (enemies_y[j] < box_y[i] + W_H)))
+                                enemies_blocked[j][0] <= 1;
+                        end
+                        //Right
+                        if ((enemies_x[j] <= box_x[i]) && (enemies_x[j] >= box_x[i] - ENEMY_W))
+                        begin
+                            if (((enemies_y[j] + ENEMY_H > box_y[i]) && (enemies_y[j] + ENEMY_H) <= box_y[i] + W_H) || ((enemies_y[j] >= box_y[i]) && (enemies_y[j] < box_y[i] + W_H)))
+                                enemies_blocked[j][1] <= 1;
+                        end
+                        //Up
+                        if ((enemies_y[j] >= box_y[i]) && (enemies_y[j] <= box_y[i] + W_H))
+                        begin
+                            if (((enemies_x[j] + ENEMY_W > box_x[i]) && (enemies_x[j] + ENEMY_W <= box_x[i] + W_W)) || ((enemies_x[j] >= box_x[i]) && (enemies_x[j] < box_x[i] + W_W)))
+                                enemies_blocked[j][2] <= 1;
+                        end
+                        //Down
+                        if ((enemies_y[j] <= box_y[i]) && (enemies_y[j] + ENEMY_H >= box_y[i]))
+                        begin
+                            if (((enemies_x[j] + ENEMY_W > box_x[i]) && (enemies_x[j] + ENEMY_W <= box_x[i] + W_W)) || ((enemies_x[j] >= box_x[i]) && (enemies_x[j] < box_x[i] + W_W)))
+                                enemies_blocked[j][3] <= 1;
+                        end
+                    end
+                    enemy_blocked0 = enemies_blocked[0];
+                    enemy_blocked1 = enemies_blocked[1];
+                    enemy_blocked2 = enemies_blocked[2];
+                    enemy_blocked3 = enemies_blocked[3];
+                    enemy_blocked4 = enemies_blocked[4];
+                    enemy_blocked5 = enemies_blocked[5];
+
                 end
             end
         end

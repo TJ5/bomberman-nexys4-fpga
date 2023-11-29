@@ -89,6 +89,14 @@ assign bomberman_blocked = bomberman_blocked_bw | bomberman_blocked_ubw;
 //Enemy starts moving as soon as Bomberman moves
 assign enemy_start = BtnL || BtnU || BtnD || BtnR;
 
+//enemy blocked array
+wire [3:0] enemy_blocked[0:5];
+
+//enemy location array
+
+wire [9:0] enemy_x[0:5];
+wire [9:0] enemy_y[0:5];
+
 //Clock divider
 always @(posedge sys_clk, posedge Reset) 	
     begin							
@@ -152,7 +160,11 @@ explosion bme
 box_top box_top
     (.clk(sys_clk), .reset(Reset), .b_x(b_x), .b_y(b_y), .v_x(hc), .v_y(vc), 
     .box_on(breakable_wall_rgb_en), .bomberman_blocked(bomberman_blocked_bw), .rgb_out(breakable_wall_rgb),
-    .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable));
+    .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), .explosion_SCEN(explosion_write_enable), .enemy_blocked0(enemy_blocked[0]),
+    .enemy_blocked1(enemy_blocked[1]), .enemy_blocked2(enemy_blocked[2]), .enemy_blocked3(enemy_blocked[3]), .enemy_blocked4(enemy_blocked[4]),
+    .enemy_blocked5(enemy_blocked[5]),
+    .enemy_x0(enemy_x[0]), .enemy_y0(enemy_y[0]), .enemy_x1(enemy_x[1]), .enemy_y1(enemy_y[1]), .enemy_x2(enemy_x[2]), .enemy_y2(enemy_y[2]),
+    .enemy_x3(enemy_x[3]), .enemy_y3(enemy_y[3]), .enemy_x4(enemy_x[4]), .enemy_y4(enemy_y[4]), .enemy_x5(enemy_x[5]), .enemy_y5(enemy_y[5]));
 
 //* Instantiate module for enemy//*
 
@@ -194,40 +206,40 @@ assign death_signal = death_signal_1 || death_signal_2 || death_signal_3 || deat
 
 
 
-enemy em_1 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+enemy em_0
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[0]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_1), .death_signal(death_signal_1), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_1),.set_y(sy_1), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_1));
+    .enemy_on(enemy_rgb_en_1), .enemy_x(enemy_x[0]), .enemy_y(enemy_y[0]));
 
-enemy em_2 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+enemy em_1
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[1]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_2),  .death_signal(death_signal_2), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_2),.set_y(sy_2), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_2));
+    .enemy_on(enemy_rgb_en_2), .enemy_x(enemy_x[1]), .enemy_y(enemy_y[1]));
     
-enemy em_3 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+enemy em_2
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[2]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_3), .death_signal(death_signal_3), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_3),.set_y(sy_3), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_3));
+    .enemy_on(enemy_rgb_en_3), .enemy_x(enemy_x[2]), .enemy_y(enemy_y[2]));
 
-enemy em_4 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+enemy em_3
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[3]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_4), .death_signal(death_signal_4), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_4),.set_y(sy_4), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_4));
+    .enemy_on(enemy_rgb_en_4), .enemy_x(enemy_x[3]), .enemy_y(enemy_y[3]));
 
-enemy em_5 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+enemy em_4
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[4]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_5),  .death_signal(death_signal_5), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_5),.set_y(sy_5), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en_5));
-enemy em_6 
-    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(), .v_x(hc), .v_y(vc), 
+    .enemy_on(enemy_rgb_en_5), .enemy_x(enemy_x[4]), .enemy_y(enemy_y[4]));
+enemy em_5
+    (.clk(sys_clk), .reset(Sw0), .b_x(b_x), .b_y(b_y), .enemy_blocked(enemy_blocked[5]), .v_x(hc), .v_y(vc), 
     .rgb_out(enemy_rgb_6), .death_signal(death_signal_6), .explosion_SCEN(explosion_write_enable),
     .enemy_start(enemy_start), .set_x(sx_6),.set_y(sy_6), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y),
-    .enemy_on(enemy_rgb_en));
+    .enemy_on(enemy_rgb_en), .enemy_x(enemy_x[5]), .enemy_y(enemy_y[5]));
 
 
 //* Instantiate module for enemy//*

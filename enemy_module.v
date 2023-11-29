@@ -89,7 +89,6 @@ module enemy
     assign blocked_up    = enemy_blocked[2];
     assign blocked_down  = enemy_blocked[3];
 
-    assign enemy_blocked = 4'b0000; //For Now assume enemy_blocked is never blocked
 
    
     //21 bit counter
