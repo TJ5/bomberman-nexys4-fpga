@@ -102,18 +102,25 @@ module box_top(
 
                 //Calculate if the box has exploded
                 if (explosion_SCEN) begin
-                    //boxes_exploded[i] <= !((box_x[i] >= e_x - E_WN) && (box_x[i] <= e_x + E_WP) && (box_y[i] >= e_y - E_HN) && (box_y[i] <= e_y + E_HP));
                     
                     //Explosion resembles a plus sign - exploded_temp_x represents the horizontal part of the plus sign
                     //exploded_temp_y represents the vertical part
-                    exploded_temp_x = ((box_x[i] >= e_x - E_WN) && (box_x[i] <= e_x + E_WP) && 
+                    /*
+                    exploded_temp_x = ((box_x[i] >= e_x - E_WN - W_W) && (box_x[i] <= e_x + E_WP) && 
                         (((box_y[i] >= e_y) && (box_y[i] <= e_y + E_Width)) || ((box_y[i] >= e_y - E_Width) && (box_y[i] <= e_y))));
                     
-                    exploded_temp_y = ((box_y[i] >= e_y - E_HN) && (box_y[i] <= e_y + E_HP) && 
+                    exploded_temp_y = ((box_y[i] >= e_y - E_HN) && (box_y[i] <= e_y + E_HP - W_H) && 
                         (((box_x[i] >= e_x) && (box_x[i] <= e_x + E_Width)) || ((box_x[i] >= e_x - E_Width) && (box_x[i] <= e_x))));
-
+                    */
                     //Invert result because we want 0 if box is exploded, 1 if it still exists
                     //Or with inverted boxes_exploded[i] so that if the box is already exploded it will not reappear
+
+                    exploded_temp_x = ((box_x[i] + W_W >= e_x - E_WN) && (box_x[i] <= e_x + E_WP) && 
+                        (((box_y[i] > e_y) && (box_y[i] < e_y + E_Width)) || ((box_y[i] + W_H < e_y + E_Width) && (box_y[i] + W_H > e_y))));
+                    
+                    exploded_temp_y = ((box_y[i] <= e_y + E_HN) && (box_y[i] + W_H >= box_y[i] - E_HP) && 
+                        (((box_x[i] > e_x) && (box_x[i] < e_x + E_Width)) || ((box_x[i] + W_W > e_x) && (box_x[i] + W_W < e_x + E_Width))));
+
                     boxes_exploded[i] <= !(exploded_temp_x || exploded_temp_y || ~boxes_exploded[i]);
                 end
                 
