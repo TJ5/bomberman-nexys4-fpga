@@ -5,6 +5,7 @@ module bomberman
     input [9:0] e_x, e_y,                     //Explosion x,y
     input explosion_SCEN,               //Explosion single clock enable pulse
     input [3:0] bomberman_blocked,      //bomberman is allowed to move? -> Comes from B_compare module
+    input death_signal,
     output reg game_over,                    //game is over? -> Comes from top module
     output [9:0] b_x, b_y,              //top left corner pixel location of bomberman sprite -> Goes to Bomberman_Rom_module
     output bomberman_on,                //current pixel location is inside bomberman sprite? -> Goes to Top_module 
@@ -63,7 +64,7 @@ localparam Up = 4'b0010;
 localparam Down = 4'b0001;
 localparam Idle = 4'b0000;
 
-   reg [3:0] movement_state;	
+   reg [3:0] movement_state;
    assign {q_Left, q_Right, q_Up, q_Down} = movement_state;
 
     wire blocked_left, blocked_right, blocked_up, blocked_down;
@@ -146,7 +147,7 @@ localparam Idle = 4'b0000;
                         //else we stay right
 
                         //RTL
-                        if(!blocked_right && !game_over && (b_x <= RIGHT_WALL) && (counter== TIME_LIMIT))
+                        if(!blocked_right && !game_over && (b_x < RIGHT_WALL) && (counter== TIME_LIMIT))
                             b_x <= b_x + 1;
                        // else
                             //b_x <= b_x;
