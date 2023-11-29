@@ -9,7 +9,7 @@ module enemy
     input [9:0] set_y,
     input [9:0] e_x,
     input [9:0] e_y,
-    
+    input explosion_SCEN,
     output [9:0] enemy_x, enemy_y,                                     //enemy location goes to enemy module
     output enemy_on,                                 //current pixel location is inside bomberman sprite? -> Goes to Top_module 
     output [11:0] rgb_out,                                       //color of current pixel within the bomberman sprite -> Goes to Top_module
@@ -65,8 +65,8 @@ module enemy
     //localparam TIME_LIMIT = 1400000;
     localparam TIME_LIMIT = 1400000; //For now make him fast
 
- 
- 
+ reg enemy_killed; //Signal that player killed the enemy
+ reg exploded_temp_x, exploded_temp_y; //temp vars for explosion detection
 
   
 // * FSM THAT UPDATES Enemy's SPRITE LOCATION *//
@@ -104,34 +104,47 @@ localparam Idle = 4'b0000;
                 //Initialize movement state to idle
                 movement_state <= Idle;
                 death_signal <= 0;
+                enemy_killed <= 0;
                 end
             
             else begin
-                //Left
-                if ((b_x >= enemy_x) && (b_x <= enemy_x + ENEMY_W))
-                begin
-                    if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
-                        death_signal <= 1;
+                if (explosion_SCEN) begin
+                    //Explosion resembles a plus sign - exploded_temp_x represents the horizontal part of the plus sign
+                    //exploded_temp_y represents the vertical part
+                    exploded_temp_x = ((enemy_x + B_W >= e_x - E_WN) && (enemy_x <= e_x + E_WP) && 
+                        (((enemy_y >= e_y) && (enemy_y <= e_y + E_Width)) || ((enemy_y + B_H < e_y + E_Width) && (enemy_y + B_H > e_y))));
+
+                    exploded_temp_y = ((enemy_y <= e_y + E_HN) && (enemy_y + B_H >= e_y - E_HP) && 
+                        (((enemy_x >= e_x) && (enemy_x <= e_x + E_Width)) || ((enemy_x + B_W >= e_x) && (enemy_x + B_W <= e_x + E_Width))));
+
+                    enemy_killed <= (enemy_killed || exploded_temp_x || exploded_temp_y);
                 end
-                //Right
-                if ((b_x <= enemy_x) && (b_x >= enemy_x - ENEMY_W))
-                begin
-                    if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
-                        death_signal <= 1;
+                if (!enemy_killed) begin
+                    //Left
+                    if ((b_x >= enemy_x) && (b_x <= enemy_x + ENEMY_W))
+                    begin
+                        if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
+                            death_signal <= 1;
+                    end
+                    //Right
+                    if ((b_x <= enemy_x) && (b_x >= enemy_x - ENEMY_W))
+                    begin
+                        if (((b_y + B_H > enemy_y) && (b_y + B_H) <= enemy_y + ENEMY_H) || ((b_y >= enemy_y) && (b_y < enemy_y + ENEMY_H)))
+                            death_signal <= 1;
+                    end
+                    //Up
+                    if ((b_y >= enemy_y) && (b_y <= enemy_y + ENEMY_H))
+                    begin
+                        if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
+                            death_signal <= 1;
+                    end
+                    //Down
+                    if ((b_y <= enemy_y) && (b_y + B_H >= enemy_y))
+                    begin
+                        if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
+                            death_signal <= 1;
+                    end
                 end
-                //Up
-                if ((b_y >= enemy_y) && (b_y <= enemy_y + ENEMY_H))
-                begin
-                    if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
-                        death_signal <= 1;
-                end
-                //Down
-                if ((b_y <= enemy_y) && (b_y + B_H >= enemy_y))
-                begin
-                    if (((b_x + B_W > enemy_x) && (b_x + B_W <= enemy_x + ENEMY_W)) || ((b_x >= enemy_x) && (b_x < enemy_x + ENEMY_W)))
-                        death_signal <= 1;
-                end
-            
             //Deals with enemy movement
                 case (movement_state)
                     Idle:
