@@ -128,7 +128,8 @@ display_controller dc
 
 bomberman bm 
     (.clk(sys_clk), .reset(Sw0), .L(Left_DPB), .R(Right_DPB), .U(Up_DPB), 
-    .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .game_over(game_over), .death_signal(death_signal), 
+    .D(Down_DPB), .C(Middle_DPB), .b_x(b_x), .b_y(b_y), .e_x(exploding_bomb_x), .e_y(exploding_bomb_y), 
+    .game_over(game_over), .explosion_SCEN(explosion_write_enable),
     .bomberman_blocked(bomberman_blocked), .v_x(hc), .v_y(vc), .rgb_out(bomberman_rgb),
     .bomberman_on(bomberman_rgb_en));
    
