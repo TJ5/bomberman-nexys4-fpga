@@ -1,5 +1,6 @@
 module bomberman
-    (input clk,reset,                   //System Clock, Game Reset
+    (input masterclk,
+    input clk,reset,                   //System Clock, Game Reset
     input L, U, R, D, C, 	            //bomberman actions -> Comes from top  module
     input v_x, v_y,                     //current pixel location -> Comes from vga_sync module
     input [9:0] e_x, e_y,                     //Explosion x,y
@@ -48,7 +49,7 @@ module bomberman
 
     //Time that needs to be reached before Bomberman starts moving
     //For 21 bit counter, the range is 0 to 2097152
-    localparam TIME_LIMIT = 1400000;
+    localparam TIME_LIMIT = 300000;
 
     reg exploded_temp_x, exploded_temp_y;
 
@@ -82,8 +83,8 @@ localparam Idle = 4'b0000;
             if (reset)
                 begin
                     //Initialize bomberman to corner of the map
-                    b_x     <= MIN_X;                 
-                    b_y     <= MIN_Y;
+                    b_x     <= MIN_X+16;                 
+                    b_y     <= MIN_Y+16;
                     //Initialize movement state to idle
                     movement_state <= Idle;
                     game_over <= 0;
@@ -211,7 +212,7 @@ assign col = v_x - b_x; // column of current pixel within bomberman sprite
 assign row = v_y - b_y; // row of current pixel within bomberman sprite
 
 // instantiate bomberman ROM, Note color_data_bomberman will output the color of the current pixel within the bomberman sprite
-bomberman_rom bm_rom_unit(.clk(clk), .row(row), .col(col), .color_data(rgb_out));
+bomberman_rom bm_rom_unit(.clk(sys_clk), .row(row), .col(col), .color_data(rgb_out));
            
 // Notify top_module that current pixel is inside of bomberman's sprite, so it should display the rgb_out from the bombermman module 
 assign bomberman_on = (v_x >= b_x) && (v_x <= b_x + B_W - 1) && (v_y >= b_y) && (v_y <= b_y + B_H - 1);

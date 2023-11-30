@@ -21,7 +21,7 @@ module box_rom
 always @*
     case ({row_reg, col_reg})
         
-		
-		default: color_data = 12'b1111_0000_1111; //Just make them red blocks for now
+		//1100100001102
+		default: color_data = 12'b110010000110; //Just make them red blocks for now
 	endcase
 endmodule

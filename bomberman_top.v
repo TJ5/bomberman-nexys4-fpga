@@ -182,18 +182,19 @@ wire [9:0] sx_1, sx_2, sx_3, sx_4,sx_5,sx_6;
 wire [9:0] sy_1,sy_2,sy_3,sy_4,sy_5,sy_6;
 
 //Assigning initial locations;
-assign sx_1 = MAX_X - T_SIZE - 300;
-assign sy_1 = MAX_Y - T_SIZE - 300;
-assign sx_2 = MAX_X - T_SIZE - 20;
-assign sy_2 = MAX_Y - T_SIZE - 20;
-assign sx_3 = MAX_X - T_SIZE - 40;
-assign sy_3 = MAX_Y - T_SIZE;
-assign sx_4 = MIN_X + T_SIZE + 40;
-assign sy_4 = MIN_Y + T_SIZE + 40;
-assign sx_5 = MIN_X + T_SIZE + 200;
-assign sy_5 = MAX_Y - T_SIZE -200;
-assign sx_6 = MAX_X - T_SIZE - 400;
-assign sy_6 = MAX_Y - T_SIZE - 100;
+
+assign sx_1 = MAX_X-32;
+assign sy_1 = MAX_Y-32;
+assign sx_2 = MAX_X-64;
+assign sy_2 = MAX_Y-64;
+assign sx_3 = MAX_X-96;
+assign sy_3 = MAX_Y-96;
+assign sx_4 = MIN_X +144;
+assign sy_4 = MIN_Y +144;
+assign sx_5 = MIN_X + 48;
+assign sy_5 = MIN_Y + 48;
+assign sx_6 = MIN_X + 80;
+assign sy_6 = MIN_Y +80;
 
 
 //Send signal that enemy sprite overlaps with bomberman sprite -> life lost

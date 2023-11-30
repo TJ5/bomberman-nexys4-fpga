@@ -27,7 +27,9 @@ module bomb
     localparam BOMB_H = 16;
     
     //CLOCKS required before Bomb Explodes
-    localparam BOMB_EXPLOSION_TIMER= 400000000;
+    //localparam BOMB_EXPLOSION_TIMER= 400000000;
+    localparam BOMB_EXPLOSION_TIMER= 200000000;
+
     
     localparam NUM_BOMBS = 6;
    
