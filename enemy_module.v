@@ -64,7 +64,7 @@ module enemy
     //Time that needs to be reached before Bomberman starts moving
     //For 21 bit counter, the range is 0 to 2097152
     //localparam TIME_LIMIT = 1400000;
-    localparam TIME_LIMIT = 1400000; //For now make him fast
+    localparam TIME_LIMIT = 300000; //For now make him fast
 
     reg exploded_temp_x, exploded_temp_y; //temp vars for explosion detection
 
@@ -162,9 +162,11 @@ module enemy
                     Left:
                         begin
                         //NSL
-                        if((enemy_x == LEFT_WALL) && enemy_y == BOTTOM_WALL)
+                        if(((enemy_x == LEFT_WALL)||(blocked_left)) && ((enemy_y == BOTTOM_WALL) ||(blocked_down)))
                             movement_state <= Up;
-                        else if(enemy_x == LEFT_WALL)
+                        else if(((enemy_x == LEFT_WALL) || (blocked_left) ) && ((enemy_y == TOP_WALL) || (blocked_up)))
+                            movement_state <= Down;
+                        else if((enemy_x == LEFT_WALL)||(blocked_left))
                             movement_state <=Right;
                        // if(!L) //if blocked then shift the movement register to a new direction
                          //   movement_state <= Idle;
@@ -188,9 +190,11 @@ module enemy
                         //if(!R)
                           //  movement_state <= Idle;
                         //else we stay right
-                        if ((enemy_x == RIGHT_WALL)&& (enemy_y == TOP_WALL))
-                            movement_state <= Down; 
-                        else if(enemy_x == RIGHT_WALL)
+                        if (((enemy_x == RIGHT_WALL)||(blocked_right))&& ((enemy_y == TOP_WALL)||(blocked_up)))
+                            movement_state <= Down;
+                        else if(((enemy_x == RIGHT_WALL)||(blocked_right))&& ((enemy_y == BOTTOM_WALL)||(blocked_down)))
+                            movement_state <= Up; 
+                        else if((enemy_x == RIGHT_WALL) || (blocked_right))
                             movement_state <= Left;
 
                         //RTL
@@ -210,9 +214,11 @@ module enemy
                         //if(!D)
                            // movement_state <= Idle;
                         //else we stay down
-                        if(enemy_y == BOTTOM_WALL && enemy_x == RIGHT_WALL)
+                        if(((enemy_y == BOTTOM_WALL) || (blocked_down)) && ((enemy_x == RIGHT_WALL)||(blocked_right)))
                             movement_state <= Left;
-                        else if(enemy_y == BOTTOM_WALL)
+                        else if(((enemy_y == BOTTOM_WALL) || (blocked_down)) && ((enemy_x == LEFT_WALL)||(blocked_left)))
+                            movement_state <= Right;
+                        else if((enemy_y == BOTTOM_WALL)||(blocked_down))
                             movement_state <= Up;
 
 
@@ -234,9 +240,11 @@ module enemy
                         //if(!U)
                           //  movement_state <= Idle;
                         //else we stay up
-                       if(enemy_y == TOP_WALL && enemy_x == LEFT_WALL)
+                       if(((enemy_y == TOP_WALL) || (blocked_up)) && ((enemy_x == LEFT_WALL)||(blocked_left)))
                             movement_state <= Right;
-                       else if(enemy_y == TOP_WALL)
+                       else if(((enemy_y == TOP_WALL) || (blocked_up)) && ((enemy_x == RIGHT_WALL) || (blocked_right)))
+                            movement_state <= Left; 
+                       else if((enemy_y == TOP_WALL)||(blocked_up))
                             movement_state <= Down;
 
                         //RTL
@@ -250,6 +258,7 @@ module enemy
                             counter <= counter +1;                        
                                     
                         end
+
                         
                     //default:		
 						//movement_state <= Idle;
